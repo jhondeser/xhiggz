@@ -23,7 +23,7 @@ const features: Feature[] = [
     description:
       "Únete a nuestro servidor para charlas, dudas y proyectos en tiempo real.",
     icon: ChatBubbleOvalLeftIcon,
-    url: "https://discord.gg/tu-servidor",
+    url: "https://discord.gg/V72sV6mP",
     image: "/images/comunidad/dicord_blog.png",
   },
   {
