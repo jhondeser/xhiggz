@@ -1,4 +1,3 @@
-// src/app/cursos/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import { courses } from "@/data/cursos";
 import CourseDetailContent from "@/components/pages/CourseDetailContent";
@@ -11,10 +10,12 @@ export function generateStaticParams(): { slug: string }[] {
   return courses.map((c) => ({ slug: c.slug }));
 }
 
-export default function CoursePage({ params: { slug } }: Params) {
+// Agrega async y await los params
+export default async function CoursePage({ params }: Params) {
+  const { slug } = await params; // ← Aquí está el cambio
   const course = courses.find((c) => c.slug === slug);
+  
   if (!course) return notFound();
 
-  // Le pasamos el objeto curso al componente cliente
   return <CourseDetailContent course={course} />;
 }
