@@ -1,7 +1,5 @@
 // src/components/pages/CoursesPage.tsx
 "use client";
-import { motion } from "framer-motion";
-import Link from "next/link";
 import { useState, useMemo } from "react";
 import CoursesHeader from "./CoursesHeader";
 import ContactForm from "@/components/sections/ContactForm";

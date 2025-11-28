@@ -1,8 +1,7 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import { useRef } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Line } from "@react-three/drei";
 import * as THREE from "three";
 
 function Node({ position }: { position: [number, number, number] }) {
@@ -22,11 +21,12 @@ function Node({ position }: { position: [number, number, number] }) {
 
 function Connection({ start, end }: { start: [number, number, number]; end: [number, number, number] }) {
   const points = [new THREE.Vector3(...start), new THREE.Vector3(...end)];
-  const geometry = new THREE.BufferGeometry().setFromPoints(points);
   return (
-    <line geometry={geometry}>
-      <lineBasicMaterial color="#60a5fa" linewidth={2} />
-    </line>
+    <Line 
+      points={points} 
+      color="#60a5fa" 
+      lineWidth={2}
+    />
   );
 }
 

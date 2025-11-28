@@ -43,7 +43,7 @@ export default function LearningAreas() {
         variants={container}
         className="w-[70%] mx-auto space-y-8 marginBottom: '2rem' overflow-hidden rounded-xl"
       >
-        {courses.map((course, idx) => (
+        {courses.map((course) => (
           <CourseCard key={course.slug} course={course} />
         ))}
       </motion.div>

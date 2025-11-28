@@ -2,10 +2,10 @@
 
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { testimonials } from "@/data/testimonials";  // <-- aquí
+import { testimonials } from "@/data/testimonials"; 
 
 export default function Testimonials() {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
@@ -14,17 +14,19 @@ export default function Testimonials() {
   });
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startAutoplay = () => {
+  // Usar useCallback para memoizar la función
+  const startAutoplay = useCallback(() => {
     timerRef.current = setInterval(() => instanceRef.current?.next(), 4000);
-  };
-  const stopAutoplay = () => {
+  }, [instanceRef]); // instanceRef es estable entre renders
+
+  const stopAutoplay = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
-  };
+  }, []);
 
   useEffect(() => {
     startAutoplay();
     return () => stopAutoplay();
-  }, []);
+  }, [startAutoplay, stopAutoplay]); // Ahora las dependencias son estables
 
   const container = {
     hidden: {},
