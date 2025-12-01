@@ -71,7 +71,7 @@ export default function CourseCard({
         style={{ 
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-          transition: "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+          transition: "transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)"
         }}
       >
         {/* FRENTE de la card - Deshabilitado cuando está girado */}

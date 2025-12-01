@@ -33,7 +33,13 @@ function CoreX() {
   );
 }
 
-function OrbitRing({ rotation = [0, 0, 0], radius = 2.8, color = "#22d3ee" }) {
+interface OrbitRingProps {
+  rotation?: [number, number, number];
+  radius?: number;
+  color?: string;
+}
+
+function OrbitRing({ rotation = [0, 0, 0], radius = 2.8, color = "#22d3ee" }: OrbitRingProps) {
   return (
     <mesh rotation={rotation}>
       <torusGeometry args={[radius, 0.01, 16, 100]} />
@@ -48,8 +54,23 @@ function OrbitRing({ rotation = [0, 0, 0], radius = 2.8, color = "#22d3ee" }) {
   );
 }
 
-function OrbitParticle({ speed = 1, distance = 2.8, size = 0.12, color = "#60a5fa", angleOffset = 0 }) {
+interface OrbitParticleProps {
+  speed?: number;
+  distance?: number;
+  size?: number;
+  color?: string;
+  angleOffset?: number;
+}
+
+function OrbitParticle({ 
+  speed = 1, 
+  distance = 2.8, 
+  size = 0.12, 
+  color = "#60a5fa", 
+  angleOffset = 0 
+}: OrbitParticleProps) {
   const ref = useRef<THREE.Mesh>(null!);
+  
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime() * speed + angleOffset;
     ref.current.position.x = Math.cos(t) * distance;
@@ -71,6 +92,7 @@ export default function ParticleScene() {
       <ambientLight intensity={0.2} />
       <pointLight position={[5, 5, 5]} intensity={1.5} />
       <CoreX />
+      
       {/* Anillos elípticos tipo logo */}
       <OrbitRing rotation={[Math.PI / 2.5, 0, 0]} color="#38bdf8" />
       <OrbitRing rotation={[0, Math.PI / 2.5, 0]} color="#9333ea" />
