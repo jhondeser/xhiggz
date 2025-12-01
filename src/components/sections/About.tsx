@@ -8,7 +8,7 @@ import ParticleScene from "@/components/three/ParticleScene";
 
 export default function AboutSection() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const isInView = useInView(ref, { once: true, amount: 0.15 });
 
   const container = {
     hidden: { opacity: 0 },
@@ -23,7 +23,7 @@ export default function AboutSection() {
   const item = {
     hidden: { 
       opacity: 0, 
-      y: 60,
+      y: 40,
       scale: 0.9
     },
     visible: {

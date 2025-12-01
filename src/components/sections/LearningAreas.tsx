@@ -9,7 +9,7 @@ import { SparklesIcon, AcademicCapIcon, RocketLaunchIcon } from "@heroicons/reac
 
 export default function LearningAreas() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.15 });
 
   const container = {
     hidden: { opacity: 0 },
