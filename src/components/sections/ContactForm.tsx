@@ -115,7 +115,7 @@ export default function ContactForm() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.15 }}
           variants={containerVariants}
           className="max-w-4xl mx-auto"
         >

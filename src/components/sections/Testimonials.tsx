@@ -72,7 +72,7 @@ export default function Testimonials() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
       },
     },
   };
@@ -80,7 +80,7 @@ export default function Testimonials() {
   const item = {
     hidden: { 
       opacity: 0, 
-      y: 60,
+      y: 40,
       scale: 0.95 
     },
     visible: { 
@@ -112,7 +112,7 @@ export default function Testimonials() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.15 }}
           variants={container}
           className="text-center mb-16"
         >
