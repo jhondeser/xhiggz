@@ -53,7 +53,7 @@ export default function LearningAreas() {
   return (
     <section 
       ref={ref}
-      className="relative py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden"
+      className="relative py-12 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden"
     >
       {/* Elementos decorativos de fondo */}
       <div className="absolute inset-0 overflow-hidden">
