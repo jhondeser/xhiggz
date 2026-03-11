@@ -1,6 +1,13 @@
 // src/types/index.ts
 import { ReactNode } from "react";
 
+
+export interface CourseModule {
+  modulo: string;
+  semanas: string;
+  temas: string[];
+}
+
 export interface Course {
   id: string;
   slug: string;
@@ -11,7 +18,6 @@ export interface Course {
   categoria: string;
   img: string;
   
-  // Nuevos campos recomendados para mejorar la experiencia
   nivel?: 'Principiante' | 'Intermedio' | 'Avanzado' | 'Todos los niveles';
   duracion?: string;
   precio?: {
@@ -43,12 +49,13 @@ export interface Course {
   accesoVitalicio?: boolean;
   soporte?: boolean;
   comunidad?: boolean;
-  // Estadísticas adicionales
   estadisticas?: {
     satisfaccion: number;
     empleabilidad: number;
     completacion: number;
   };
+
+  temario?: CourseModule[];
 }
 
 export interface Instructor {

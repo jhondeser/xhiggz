@@ -5,14 +5,16 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Course } from "@/types";
 import InstructorsSection from "./InstructorsSection";
-import { 
+import {
   ArrowLeftIcon,
   AcademicCapIcon,
   CheckCircleIcon,
   CurrencyDollarIcon,
   ClockIcon,
   UsersIcon,
-  RocketLaunchIcon
+  RocketLaunchIcon,
+  BookOpenIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/24/solid";
 
@@ -22,162 +24,200 @@ interface Props {
 
 export default function CourseDetailContent({ course }: Props) {
   const features = [
-    { icon: <AcademicCapIcon className="w-5 h-5" />, text: "Acceso de por vida" },
-    { icon: <CheckCircleIcon className="w-5 h-5" />, text: "Certificado incluido" },
-    { icon: <UsersIcon className="w-5 h-5" />, text: "Comunidad exclusiva" },
-    { icon: <RocketLaunchIcon className="w-5 h-5" />, text: "Proyectos reales" },
-  ];
+    course.accesoVitalicio && {
+      icon: <AcademicCapIcon className="w-5 h-5" />,
+      text: "Acceso de por vida",
+    },
+    course.certificado && {
+      icon: <CheckCircleIcon className="w-5 h-5" />,
+      text: "Certificado incluido",
+    },
+    course.comunidad && {
+      icon: <UsersIcon className="w-5 h-5" />,
+      text: "Comunidad",
+    },
+    course.soporte && {
+      icon: <RocketLaunchIcon className="w-5 h-5" />,
+      text: "Soporte",
+    },
+  ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
 
-  const learningPoints = [
-    "Fundamentos sólidos de la tecnología",
-    "Desarrollo de proyectos prácticos desde cero",
-    "Metodologías ágiles y buenas prácticas",
-    "Integración con herramientas modernas",
-    "Optimización y escalabilidad",
-    "Preparación para el mercado laboral"
-  ];
+  const moneda = course.precio?.moneda || "€";
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24"> {/* Padding superior para header */}
-      {/* Hero Section Mejorada */}
-      <section className="relative overflow-hidden">
-        {/* Elementos decorativos */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-cyan-200 rounded-full blur-3xl opacity-20"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full blur-3xl opacity-20"></div>
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24">
+      {/* HERO */}
+      <section className="relative overflow-hidden pt-6 sm:pt-8 lg:pt-10 p-4">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -right-24 sm:-top-40 sm:-right-40 w-56 h-56 sm:w-80 sm:h-80 bg-cyan-200 rounded-full blur-3xl opacity-20" />
+          <div className="absolute -bottom-24 -left-24 sm:-bottom-40 sm:-left-40 w-56 h-56 sm:w-80 sm:h-80 bg-blue-200 rounded-full blur-3xl opacity-20" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Breadcrumb Mejorado */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8"
+            className="mb-6 sm:mb-8"
           >
-            <Link 
-              href="/cursos" 
-              className="inline-flex items-center gap-2 text-cyan-600 hover:text-cyan-700 font-medium group transition-colors"
+            <Link
+              href="/cursos"
+              className="inline-flex items-center gap-2 text-sm sm:text-base text-cyan-600 hover:text-cyan-700 font-medium group transition-colors"
             >
               <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Volver a todos los cursos
             </Link>
           </motion.div>
 
-          {/* Contenido Principal */}
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Información del Curso */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* INFO */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-6"
+              className="space-y-5 sm:space-y-6 order-2 lg:order-1"
             >
-              {/* Badge de Categoría */}
-              <div className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-medium">
-                {course.emoji || "🎯"} {course.categoria}
+              <div className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-3 py-2 sm:px-4 rounded-full text-xs sm:text-sm font-medium max-w-full">
+                <span className="shrink-0">{course.emoji || "🎯"}</span>
+                <span className="truncate">{course.categoria}</span>
               </div>
 
-              {/* Título */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-900 leading-tight break-words">
                 {course.title}
               </h1>
 
-              {/* Descripción */}
-              <p className="text-xl text-gray-600 leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-relaxed">
                 {course.description}
               </p>
 
-              {/* Rating */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                  <span className="ml-2 text-gray-700 font-semibold">4.9/5</span>
-                </div>
-                <span className="text-gray-500">•</span>
-                <div className="flex items-center gap-1">
-                  <UsersIcon className="w-5 h-5 text-gray-400" />
-                  <span className="text-gray-700">150+ estudiantes</span>
-                </div>
-              </div>
-
-              {/* Duración y Nivel */}
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-200">
-                  <ClockIcon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">{course.duracion}</span>
-                </div>
-                <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-gray-200">
-                  <AcademicCapIcon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">{course.nivel || "Todos los niveles"}</span>
-                </div>
-              </div>
-
-              {/* Features */}
-              <div className="grid grid-cols-2 gap-3">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2 text-gray-700">
-                    <div className="text-cyan-500">
-                      {feature.icon}
-                    </div>
-                    <span className="text-sm">{feature.text}</span>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm sm:text-base">
+                {course.rating && (
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <StarIcon
+                        key={i}
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-current"
+                      />
+                    ))}
+                    <span className="ml-2 text-gray-700 font-semibold">
+                      {course.rating}/5
+                    </span>
                   </div>
-                ))}
+                )}
+
+                {typeof course.estudiantes === "number" && (
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <span className="text-gray-400 hidden sm:inline">•</span>
+                    <UsersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                    <span>
+                      {course.estudiantes > 0
+                        ? `${course.estudiantes}+ estudiantes`
+                        : "Nuevo curso"}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-wrap gap-3">
+                {course.duracion && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
+                    <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <span className="text-gray-700">{course.duracion}</span>
+                  </div>
+                )}
+
+                {course.nivel && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
+                    <AcademicCapIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <span className="text-gray-700">{course.nivel}</span>
+                  </div>
+                )}
+
+                {course.contenido?.modulos && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
+                    <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <span className="text-gray-700">
+                      {course.contenido.modulos} módulos
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {features.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {features.map((feature, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-2 text-gray-700 bg-white/70 rounded-xl px-3 py-2 border border-gray-100"
+                    >
+                      <div className="text-cyan-500 shrink-0">{feature.icon}</div>
+                      <span className="text-sm sm:text-base">{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {course.tags && course.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {course.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs sm:text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
                 <Link
                   href="/inscripcion"
-                  className="group bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-3"
+                  className="group w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3.5 sm:py-4 px-5 sm:px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 sm:hover:scale-105 inline-flex items-center justify-center gap-3 text-sm sm:text-base"
                 >
                   <span>🚀 Inscribirme Ahora</span>
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    →
+                  </span>
                 </Link>
+
                 <Link
                   href="/contacto"
-                  className="border-2 border-gray-300 text-gray-700 font-semibold py-4 px-8 rounded-2xl hover:border-cyan-400 hover:text-cyan-600 transition-all duration-300 inline-flex items-center justify-center"
+                  className="w-full sm:w-auto border-2 border-gray-300 text-gray-700 font-semibold py-3.5 sm:py-4 px-5 sm:px-8 rounded-2xl hover:border-cyan-400 hover:text-cyan-600 transition-all duration-300 inline-flex items-center justify-center text-sm sm:text-base"
                 >
                   💬 Tener una consulta
                 </Link>
               </div>
             </motion.div>
 
-            {/* Modelo 3D / Imagen */}
+            {/* VISUAL */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="relative"
+              className="relative order-1 lg:order-2"
             >
-              <div className="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-3xl p-8 border border-gray-200/50 backdrop-blur-sm">
-                {course.model3D || (
-                  <div className="w-full h-[400px] bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <div className="text-6xl mb-4">🎓</div>
-                      <h3 className="text-2xl font-bold mb-2">Visualización del Curso</h3>
-                      <p className="text-cyan-100">Contenido interactivo disponible</p>
-                    </div>
+              <div className="relative h-[280px] sm:h-[380px] md:h-[460px] lg:h-[550px] bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+                {course.model3D}
+
+                {course.destacado && (
+                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white rounded-xl sm:rounded-2xl px-3 py-2 sm:p-4 shadow-lg border max-w-[120px] sm:max-w-none">
+                    <div className="text-lg sm:text-2xl">🔥</div>
+                    <p className="text-[10px] sm:text-xs font-semibold text-gray-800 mt-1 leading-tight">
+                      Curso destacado
+                    </p>
                   </div>
                 )}
-                
-                {/* Elemento decorativo flotante */}
-                <div className="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-lg border">
-                  <div className="text-2xl">🔥</div>
-                  <p className="text-xs font-semibold text-gray-800 mt-1">Oferta Especial</p>
-                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Sección de Detalles en Grid */}
-      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Lo que Aprenderás */}
+      {/* BLOQUES REALES */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Objetivos */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -187,26 +227,26 @@ export default function CourseDetailContent({ course }: Props) {
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <CheckCircleIcon className="w-4 h-4" />
-              Lo que Aprenderás
+              Lo que aprenderás
             </div>
-            
+
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Habilidades que Desarrollarás
+              Objetivos del curso
             </h2>
-            
+
             <ul className="space-y-4">
-              {learningPoints.map((point, index) => (
+              {course.objetivos?.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <CheckCircleIcon className="w-3 h-3 text-green-600" />
                   </div>
-                  <span className="text-gray-700">{point}</span>
+                  <span className="text-gray-700">{item}</span>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Detalles del Programa */}
+          {/* Requisitos */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -215,51 +255,27 @@ export default function CourseDetailContent({ course }: Props) {
             className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8"
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <AcademicCapIcon className="w-4 h-4" />
-              Detalles del Programa
+              <WrenchScrewdriverIcon className="w-4 h-4" />
+              Requisitos
             </div>
-            
+
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              Estructura del Curso
+              Qué necesitas para empezar
             </h2>
-            
-            <div className="space-y-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                <div className="flex items-center gap-3">
-                  <ClockIcon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">Duración</span>
-                </div>
-                <span className="font-bold text-gray-900">{course.duracion}</span>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                <div className="flex items-center gap-3">
-                  <UsersIcon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">Modalidad</span>
-                </div>
-                <span className="font-bold text-gray-900">100% Online</span>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                <div className="flex items-center gap-3">
-                  <RocketLaunchIcon className="w-5 h-5 text-gray-600" />
-                  <span className="text-gray-700">Proyectos</span>
-                </div>
-                <span className="font-bold text-gray-900">5+ prácticos</span>
-              </div>
-            </div>
-            
-            <div className="mt-8 pt-8 border-t border-gray-200">
-              <Link
-                href="/contacto"
-                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                📋 Solicitar Temario Completo
-              </Link>
-            </div>
+
+            <ul className="space-y-4">
+              {course.requisitos?.map((item, index) => (
+                <li key={index} className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <CheckCircleIcon className="w-3 h-3 text-blue-600" />
+                  </div>
+                  <span className="text-gray-700">{item}</span>
+                </li>
+              ))}
+            </ul>
           </motion.div>
 
-          {/* Inversión */}
+          {/* Precio real */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -267,60 +283,49 @@ export default function CourseDetailContent({ course }: Props) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-3xl shadow-2xl p-8 text-white relative overflow-hidden"
           >
-            {/* Elemento decorativo */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-            
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
+
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <CurrencyDollarIcon className="w-4 h-4" />
                 Inversión
               </div>
-              
-              <h2 className="text-2xl font-bold mb-6">
-                Tu Futuro Comienza Aquí
-              </h2>
-              
+
+              <h2 className="text-2xl font-bold mb-6">Elige cómo empezar</h2>
+
               <div className="space-y-6 mb-8">
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
-                  <div className="text-4xl font-bold mb-2">$299</div>
-                  <div className="text-cyan-100">Pago Único</div>
-                  <ul className="mt-4 space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <CheckCircleIcon className="w-4 h-4" />
-                      Ahorro del 20%
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircleIcon className="w-4 h-4" />
-                      Acceso vitalicio
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
-                  <div className="text-4xl font-bold mb-2">$35/mes</div>
-                  <div className="text-cyan-100">Plan Mensual</div>
-                  <ul className="mt-4 space-y-2 text-sm">
-                    <li className="flex items-center gap-2">
-                      <CheckCircleIcon className="w-4 h-4" />
-                      Sin compromiso
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircleIcon className="w-4 h-4" />
-                      Cancelación fácil
-                    </li>
-                  </ul>
-                </div>
+                {course.precio?.completo && (
+                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
+                    <div className="text-4xl font-bold mb-2">
+                      {moneda}
+                      {course.precio.completo}
+                    </div>
+                    <div className="text-cyan-100">Pago completo</div>
+                  </div>
+                )}
+
+                {course.precio?.mensual && (
+                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
+                    <div className="text-4xl font-bold mb-2">
+                      {moneda}
+                      {course.precio.mensual}/mes
+                    </div>
+                    <div className="text-cyan-100">Plan mensual</div>
+                  </div>
+                )}
               </div>
-              
+
               <div className="space-y-3">
                 <Link
                   href="/inscripcion"
                   className="w-full bg-white text-cyan-600 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2"
                 >
-                  💳 Comenzar Ahora
+                  💳 Comenzar ahora
                 </Link>
+
                 <p className="text-center text-cyan-200 text-sm">
-                  ✅ Garantía de 30 días • ✅ Financiamiento disponible
+                  {course.certificado ? "✅ Certificado" : ""}{" "}
+                  {course.accesoVitalicio ? "• ✅ Acceso vitalicio" : ""}
                 </p>
               </div>
             </div>
@@ -328,7 +333,116 @@ export default function CourseDetailContent({ course }: Props) {
         </div>
       </section>
 
-      {/* Sección de Instructores */}
+      {/* TEMARIO REAL */}
+      {course.temario && course.temario.length > 0 && (
+        <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 lg:p-10"
+          >
+            <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+              <BookOpenIcon className="w-4 h-4" />
+              Temario del curso
+            </div>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">
+              Módulos y contenido
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Este es el recorrido real del curso, organizado por módulos y semanas.
+            </p>
+
+            <div className="space-y-6">
+              {course.temario.map((modulo, index) => (
+                <div
+                  key={index}
+                  className="rounded-2xl border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        {index + 1}. {modulo.modulo}
+                      </h3>
+                      <p className="text-sm text-cyan-700 font-medium mt-1">
+                        {modulo.semanas}
+                      </p>
+                    </div>
+                  </div>
+
+                  <ul className="grid md:grid-cols-2 gap-3">
+                    {modulo.temas.map((tema, temaIndex) => (
+                      <li
+                        key={temaIndex}
+                        className="flex items-start gap-3 text-gray-700 bg-slate-50 rounded-xl px-4 py-3"
+                      >
+                        <CheckCircleIcon className="w-5 h-5 text-cyan-500 flex-shrink-0 mt-0.5" />
+                        <span>{tema}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
+      )}
+
+      {/* BENEFICIOS + STATS */}
+      <section className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="grid lg:grid-cols-2 gap-8">
+          {course.beneficios && course.beneficios.length > 0 && (
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Beneficios del curso
+              </h2>
+
+              <ul className="space-y-4">
+                {course.beneficios.map((beneficio, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <CheckCircleIcon className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">{beneficio}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {course.estadisticas && (
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Estadísticas del curso
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="rounded-2xl bg-slate-50 p-5 text-center">
+                  <p className="text-3xl font-bold text-cyan-600">
+                    {course.estadisticas.satisfaccion}%
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">Satisfacción</p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-5 text-center">
+                  <p className="text-3xl font-bold text-cyan-600">
+                    {course.estadisticas.completacion}%
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">Completación</p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-5 text-center">
+                  <p className="text-3xl font-bold text-cyan-600">
+                    {course.contenido?.proyectos ?? 0}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">Proyectos</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
       <InstructorsSection />
     </main>
   );

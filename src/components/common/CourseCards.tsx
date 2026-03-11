@@ -60,14 +60,14 @@ export default function CourseCard({
 
   return (
     <div
-      className={`relative w-full h-[550px] ${className}`}
+      className={`relative w-full h-[650px] ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleCardClick}
     >
       {/* Card Container */}
       <div 
-        className="relative w-full h-[500px] transition-transform duration-300 ease-out"
+        className="relative w-full h-[600px] transition-transform duration-300 ease-out"
         style={{ 
           transformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
@@ -191,7 +191,7 @@ export default function CourseCard({
           <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-xl"></div>
 
           {/* Modelo 3D */}
-          <div className="relative z-10 w-full h-48 mb-4 flex justify-center items-center bg-gradient-to-br from-gray-800 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden">
+          <div className="relative z-10 w-full h-[280px] mb-4 flex justify-center items-center bg-gradient-to-br from-gray-800 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden">
             {course.model3D ? (
               <div className="w-full h-full flex items-center justify-center">
                 {course.model3D}
