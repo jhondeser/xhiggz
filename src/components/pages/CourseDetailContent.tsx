@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Course } from "@/types";
 import InstructorsSection from "./InstructorsSection";
+import { modelRegistry } from "@/components/three/modelRegistry";
 import {
   ArrowLeftIcon,
   AcademicCapIcon,
@@ -43,6 +44,10 @@ export default function CourseDetailContent({ course }: Props) {
   ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
 
   const moneda = course.precio?.moneda || "€";
+
+  const ModelComponent = course.modelKey
+  ? modelRegistry[course.modelKey as keyof typeof modelRegistry]
+  : null;
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24">
@@ -197,8 +202,8 @@ export default function CourseDetailContent({ course }: Props) {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative order-1 lg:order-2"
             >
-              <div className="relative h-[280px] sm:h-[380px] md:h-[460px] lg:h-[550px] bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
-                {course.model3D}
+              <div className="relative h-[300px] sm:h-[380px] md:h-[460px] lg:h-[600px] bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-gray-200/50 backdrop-blur-sm overflow-hidden">
+                {ModelComponent ? <ModelComponent /> : null}
 
                 {course.destacado && (
                   <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white rounded-xl sm:rounded-2xl px-3 py-2 sm:p-4 shadow-lg border max-w-[120px] sm:max-w-none">

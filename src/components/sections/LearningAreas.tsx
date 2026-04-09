@@ -122,14 +122,13 @@ export default function LearningAreas() {
           variants={container}
           className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto"
         >
-          {courses.map((course, index) => (
+          {courses
+          .filter((course) => ["1", "3", "6"].includes(course.id))
+          .map((course) => (
             <motion.div
               key={course.slug}
               variants={item}
-              whileHover={{ 
-                y: -8,
-                transition: { duration: 0.3 }
-              }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
               className="group"
             >
               <CourseCard course={course} />

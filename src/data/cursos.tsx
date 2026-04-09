@@ -1,12 +1,3 @@
-// src/data/cursos.tsx
-import MineCurse1 from "@/components/three/MineCurse1Model";
-import Minecurse2 from "@/components/three/MineCurse2Model";
-import RobloxCurse1 from "@/components/three/RobloxCurse1";
-import RobloxCurse2 from "@/components/three/RobloxCurse2";
-import RobloxCurse3 from "@/components/three/RobloxCurse3";
-import GodotCurse1 from "@/components/three/GodotCurse1Model";
-import GodotCurse2 from "@/components/three/GodotCurse2Model";
-
 import { Course } from "@/types";
 
 export const courses: Course[] = [
@@ -16,7 +7,7 @@ export const courses: Course[] = [
     title: "Minecraft Education: Creación Digital Básica",
     description: "Aprende diseño, automatización y programación dentro de Minecraft Education creando un mundo interactivo paso a paso.",
     emoji: "⛏️",
-    model3D: <MineCurse1 />,
+    modelKey: "mine-1",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/minecraft_card.png",
 
@@ -172,7 +163,7 @@ export const courses: Course[] = [
     title: "Minecraft Java: Dungeon Creator & Modding",
     description: "Aprende arquitectura avanzada, comandos, diseño de niveles y creación de mods en Minecraft Java construyendo una mazmorra interactiva con jefe final propio.",
     emoji: "🏰",
-    model3D: <Minecurse2 />,
+    modelKey: "mine-2",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/micraft_card_lvl2.png",
 
@@ -299,7 +290,7 @@ export const courses: Course[] = [
     title: "Roblox Studio: Theme Park Creator",
     description: "Aprende modelado 3D, scripting en Lua, interfaces y diseño de mecánicas creando un parque de atracciones interactivo con obbys temáticos y sistema de tickets.",
     emoji: "🎢",
-    model3D: <RobloxCurse1 />,
+    modelKey: "roblox-1",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/roblox_card_lvl1.png",
 
@@ -433,7 +424,7 @@ export const courses: Course[] = [
     title: "Roblox Studio: Xhiggs Archipelago",
     description: "Aprende construcción low poly, programación intermedia en Lua, NPCs, animaciones y combate básico creando un archipiélago de islas temáticas con aliados, enemigos y tools interactivas.",
     emoji: "🏝️",
-    model3D: <RobloxCurse2 />,
+    modelKey: "roblox-2",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/roblox_card_lvl2.png",
 
@@ -580,7 +571,7 @@ export const courses: Course[] = [
     title: "Roblox Studio: Xhiggs RPG Systems",
     description: "Transforma el mundo del Xhiggs Archipelago en un RPG completo aprendiendo programación orientada a objetos en Lua, sistemas de clases, enemigos, loot, inventario y UI de personaje.",
     emoji: "⚔️",
-    model3D: <RobloxCurse3 />,
+    modelKey: "roblox-3",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/roblox_card_lvl3.png",
 
@@ -737,7 +728,7 @@ export const courses: Course[] = [
     title: "Godot 2D: Xelda Dungeon Creator",
     description: "Aprende desarrollo de videojuegos desde cero utilizando Godot y crea un juego estilo Zelda donde diseñarás tu propia mazmorra con enemigos, puzzles, NPCs y recompensas dentro del universo Xhiggs.",
     emoji: "🗡️",
-    model3D: <GodotCurse1 />,
+    modelKey: "godot-1",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/godot_card_lvl1.png",
 
@@ -919,7 +910,7 @@ export const courses: Course[] = [
     title: "Godot 3D: Xelda — Realms of Xhiggs",
     description: "Expande el universo de Xhiggs creando un videojuego 3D en tercera persona inspirado en Zelda. Aprende movimiento 3D, cámara, combate, NPCs, enemigos, animaciones y diseño de reinos conectados.",
     emoji: "🗡️",
-    model3D: <GodotCurse2 />,
+    modelKey: "godot-2",
     categoria: "Tecnología y Videojuegos",
     img: "/images/cursos_img/godot_card_lvl2.png",
 

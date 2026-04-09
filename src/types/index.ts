@@ -1,5 +1,6 @@
 // src/types/index.ts
 import { ReactNode } from "react";
+import type { ComponentType } from "react";
 
 
 export interface CourseModule {
@@ -14,7 +15,7 @@ export interface Course {
   title: string;
   description: string;
   emoji?: string;
-  model3D: ReactNode;
+  modelKey?: string;
   categoria: string;
   img: string;
   
@@ -224,3 +225,4 @@ export interface ProyectoEstudiante {
   comentarios: number;
   destacado?: boolean;
 }
+
