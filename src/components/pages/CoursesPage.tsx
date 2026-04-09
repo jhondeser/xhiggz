@@ -1,17 +1,32 @@
-// src/components/pages/CoursesPage.tsx
 "use client";
-import { useState, useMemo } from "react";
+
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CoursesHeader from "./CoursesHeader";
 import ContactForm from "@/components/sections/ContactForm";
 import { courses } from "@/data/cursos";
 import CourseCard from "@/components/common/CourseCards";
-import { MagnifyingGlassIcon, XMarkIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import {
+  MagnifyingGlassIcon,
+  XMarkIcon,
+  FunnelIcon,
+} from "@heroicons/react/24/outline";
 
 export default function CoursesPage() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeMobileCard, setActiveMobileCard] = useState<string | null>(null);
+  const [activeDesktopCard, setActiveDesktopCard] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const categories = useMemo(
     () => ["Todas", ...Array.from(new Set(courses.map((c) => c.categoria)))],
@@ -26,8 +41,10 @@ export default function CoursesPage() {
         c.title.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
         c.categoria.toLowerCase().includes(q);
+
       const matchesCategory =
         activeCategory === "Todas" || c.categoria === activeCategory;
+
       return matchesSearch && matchesCategory;
     });
   }, [query, activeCategory]);
@@ -37,9 +54,9 @@ export default function CoursesPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -49,24 +66,22 @@ export default function CoursesPage() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
     <>
       <CoursesHeader />
-      
+
       <section className="relative py-16 bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
-        {/* Elementos decorativos de fondo */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-200 rounded-full blur-3xl opacity-20"></div>
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-200 rounded-full blur-3xl opacity-20"></div>
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-cyan-200 rounded-full blur-3xl opacity-20" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-200 rounded-full blur-3xl opacity-20" />
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10">
-          {/* Header de la sección */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -100,11 +115,7 @@ export default function CoursesPage() {
             </motion.p>
           </motion.div>
 
-          {/* Barra de búsqueda mejorada */}
-          <motion.div
-            variants={itemVariants}
-            className="max-w-2xl mx-auto mb-8"
-          >
+          <motion.div variants={itemVariants} className="max-w-2xl mx-auto mb-8">
             <div className="relative">
               <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
               <input
@@ -125,12 +136,7 @@ export default function CoursesPage() {
             </div>
           </motion.div>
 
-          {/* Filtros mejorados */}
-          <motion.div
-            variants={itemVariants}
-            className="mb-12"
-          >
-            {/* Botón móvil para filtros */}
+          <motion.div variants={itemVariants} className="mb-12">
             <button
               onClick={() => setShowMobileFilters(!showMobileFilters)}
               className="md:hidden w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between shadow-sm mb-4"
@@ -144,11 +150,7 @@ export default function CoursesPage() {
               </span>
             </button>
 
-            {/* Filtros - Desktop y Mobile */}
-            <div className={`
-              ${showMobileFilters ? 'block' : 'hidden'} 
-              md:block
-            `}>
+            <div className={`${showMobileFilters ? "block" : "hidden"} md:block`}>
               <div className="flex flex-wrap justify-center gap-3">
                 {categories.map((cat) => (
                   <motion.button
@@ -158,14 +160,14 @@ export default function CoursesPage() {
                     onClick={() => {
                       setActiveCategory(cat);
                       setShowMobileFilters(false);
+                      setActiveMobileCard(null);
+                      setActiveDesktopCard(null);
                     }}
-                    className={`
-                      px-6 py-3 rounded-2xl font-medium transition-all duration-300 border-2
-                      ${activeCategory === cat
+                    className={`px-6 py-3 rounded-2xl font-medium transition-all duration-300 border-2 ${
+                      activeCategory === cat
                         ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-transparent shadow-lg"
                         : "bg-white text-gray-700 border-gray-200 hover:border-cyan-300 hover:shadow-md"
-                      }
-                    `}
+                    }`}
                   >
                     {cat}
                   </motion.button>
@@ -174,24 +176,24 @@ export default function CoursesPage() {
             </div>
           </motion.div>
 
-          {/* Contador de resultados */}
-          <motion.div
-            variants={itemVariants}
-            className="text-center mb-8"
-          >
+          <motion.div variants={itemVariants} className="text-center mb-8">
             <p className="text-gray-600">
-              Mostrando <span className="font-semibold text-cyan-600">{filtered.length}</span> de{" "}
+              Mostrando{" "}
+              <span className="font-semibold text-cyan-600">{filtered.length}</span> de{" "}
               <span className="font-semibold text-gray-900">{courses.length}</span> cursos
               {query && (
-                <> para "<span className="font-semibold text-gray-900">{query}</span>"</>
+                <>
+                  {" "}para "<span className="font-semibold text-gray-900">{query}</span>"
+                </>
               )}
               {activeCategory !== "Todas" && (
-                <> en <span className="font-semibold text-gray-900">{activeCategory}</span></>
+                <>
+                  {" "}en <span className="font-semibold text-gray-900">{activeCategory}</span>
+                </>
               )}
             </p>
           </motion.div>
 
-          {/* Lista de cursos en GRID COMPACTO - SIN prop compact */}
           <motion.div
             variants={containerVariants}
             layout
@@ -212,12 +214,20 @@ export default function CoursesPage() {
                     No se encontraron cursos
                   </h3>
                   <p className="text-gray-600 mb-6">
-                    No hay resultados para "<strong>{query}</strong>"{activeCategory !== "Todas" && <> en <strong>{activeCategory}</strong></>}.
+                    No hay resultados para "<strong>{query}</strong>"
+                    {activeCategory !== "Todas" && (
+                      <>
+                        {" "}en <strong>{activeCategory}</strong>
+                      </>
+                    )}
+                    .
                   </p>
                   <button
                     onClick={() => {
                       setQuery("");
                       setActiveCategory("Todas");
+                      setActiveMobileCard(null);
+                      setActiveDesktopCard(null);
                     }}
                     className="bg-cyan-600 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-cyan-700 transition-colors"
                   >
@@ -227,26 +237,55 @@ export default function CoursesPage() {
               ) : (
                 <motion.div
                   variants={containerVariants}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" // Grid compacto de 3 columnas
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
-                  {filtered.map((course, index) => (
-                    <motion.div
-                      key={course.slug}
-                      variants={itemVariants}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      whileHover={{ 
-                        y: -4,
-                        transition: { duration: 0.2 }
-                      }}
-                      className="h-full"
-                    >
-                      {/* CourseCard SIN prop compact */}
-                      <CourseCard course={course} />
-                    </motion.div>
-                  ))}
+                  {filtered.map((course, index) => {
+                    const isFlipped = isMobile
+                      ? activeMobileCard === course.id
+                      : activeDesktopCard === course.id;
+
+                    return (
+                      <motion.div
+                        key={course.slug}
+                        variants={itemVariants}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        whileHover={
+                          !isMobile
+                            ? {
+                                y: -4,
+                                transition: { duration: 0.2 },
+                              }
+                            : undefined
+                        }
+                        className="h-full"
+                      >
+                        <CourseCard
+                          course={course}
+                          isFlipped={isFlipped}
+                          onFlip={() => {
+                            if (isMobile) {
+                              setActiveMobileCard((prev) =>
+                                prev === course.id ? null : course.id
+                              );
+                            }
+                          }}
+                          onHoverStart={() => {
+                            if (!isMobile) setActiveDesktopCard(course.id);
+                          }}
+                          onHoverEnd={() => {
+                            if (!isMobile) {
+                              setActiveDesktopCard((prev) =>
+                                prev === course.id ? null : prev
+                              );
+                            }
+                          }}
+                        />
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>

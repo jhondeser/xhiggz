@@ -15,15 +15,21 @@ import {
 interface CourseCardProps {
   course: Course;
   className?: string;
+  isFlipped: boolean;
+  onFlip: () => void;
+  onHoverStart?: () => void;
+  onHoverEnd?: () => void;
 }
-
 
 export default function CourseCard({
   course,
   className = "",
+  isFlipped,
+  onFlip,
+  onHoverStart,
+  onHoverEnd,
 }: CourseCardProps) {
   const [isMobile, setIsMobile] = useState(false);
-  const [isFlipped, setIsFlipped] = useState(false);
   const [shouldLoadModel, setShouldLoadModel] = useState(false);
   const [modelReady, setModelReady] = useState(false);
   const router = useRouter();
@@ -34,19 +40,16 @@ export default function CourseCard({
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-  
+
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | null = null;
 
     if (isFlipped) {
-      // reset antes de cargar
       setModelReady(false);
-
       timeout = setTimeout(() => {
         setShouldLoadModel(true);
       }, 300);
     } else {
-      // pequeño delay para evitar flicker y cargas innecesarias
       timeout = setTimeout(() => {
         setShouldLoadModel(false);
         setModelReady(false);
@@ -59,15 +62,15 @@ export default function CourseCard({
   }, [isFlipped]);
 
   const handleMouseEnter = () => {
-    if (!isMobile) setIsFlipped(true);
+    if (!isMobile) onHoverStart?.();
   };
 
   const handleMouseLeave = () => {
-    if (!isMobile) setIsFlipped(false);
+    if (!isMobile) onHoverEnd?.();
   };
 
   const handleCardClick = () => {
-    if (isMobile) setIsFlipped((prev) => !prev);
+    if (isMobile) onFlip();
   };
 
   const courseUrl = `/cursos/${course.slug}`;
@@ -79,14 +82,14 @@ export default function CourseCard({
   };
 
   const renderModel = () => {
-  const ModelComponent = course.modelKey
-    ? modelRegistry[course.modelKey as keyof typeof modelRegistry]
-    : null;
+    const ModelComponent = course.modelKey
+      ? modelRegistry[course.modelKey as keyof typeof modelRegistry]
+      : null;
 
-  if (!shouldLoadModel || !ModelComponent) return null;
+    if (!shouldLoadModel || !ModelComponent) return null;
 
-  return <ModelComponent onReady={() => setModelReady(true)} />;
-};
+    return <ModelComponent onReady={() => setModelReady(true)} />;
+  };
 
   return (
     <div
@@ -99,11 +102,11 @@ export default function CourseCard({
         className="relative w-full h-[600px]"
         style={{
           transformStyle: "preserve-3d",
+          WebkitTransformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
           transition: "transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
         }}
       >
-        {/* Frente */}
         <div
           className={`absolute inset-0 w-full h-full bg-gradient-to-br from-slate-900/95 to-gray-900/95 rounded-2xl border-2 border-white/10 shadow-2xl overflow-hidden cursor-pointer ${
             isFlipped ? "pointer-events-none" : ""
@@ -111,6 +114,8 @@ export default function CourseCard({
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
+            transform: "rotateY(0deg) translateZ(0)",
+            WebkitTransform: "rotateY(0deg) translateZ(0)",
           }}
         >
           <div
@@ -195,7 +200,6 @@ export default function CourseCard({
           </div>
         </div>
 
-        {/* Reverso */}
         <div
           className={`absolute inset-0 w-full h-full bg-gradient-to-br from-gray-900 to-slate-800 rounded-2xl border-2 border-cyan-500/30 shadow-2xl p-5 flex flex-col overflow-hidden ${
             !isFlipped ? "pointer-events-none" : ""
@@ -203,14 +207,14 @@ export default function CourseCard({
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
+            transform: "rotateY(180deg) translateZ(0)",
+            WebkitTransform: "rotateY(180deg) translateZ(0)",
           }}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-xl" />
 
           <div className="relative z-10 w-full h-[280px] mb-4 flex justify-center items-center bg-gradient-to-br from-gray-800 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden">
-            {/* Fondo suave mientras carga */}
             <div
               className={`absolute inset-0 transition-opacity duration-500 ${
                 modelReady ? "opacity-0" : "opacity-100"
@@ -227,12 +231,16 @@ export default function CourseCard({
                   ? "opacity-100 scale-100 blur-0"
                   : "opacity-0 scale-95 blur-[2px]"
               }`}
+              style={{ transform: "translateZ(1px)" }}
             >
               {renderModel()}
             </div>
           </div>
 
-          <div className="relative z-10 flex-1">
+          <div
+            className="relative z-10 flex-1"
+            style={{ transform: "translateZ(1px)" }}
+          >
             <div className="mb-3">
               <h4 className="font-bold text-white mb-1 text-lg">
                 {course.title}
