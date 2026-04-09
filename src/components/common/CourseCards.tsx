@@ -105,6 +105,7 @@ export default function CourseCard({
           WebkitTransformStyle: "preserve-3d",
           transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
           transition: "transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1)",
+          willChange: "transform",
         }}
       >
         <div
@@ -116,10 +117,13 @@ export default function CourseCard({
             WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(0deg) translateZ(0)",
             WebkitTransform: "rotateY(0deg) translateZ(0)",
+
           }}
         >
           <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 hover:scale-110"
+            className={`absolute inset-0 bg-cover bg-center transition-transform duration-500 ${
+              !isMobile ? "hover:scale-110" : ""
+            }`}
             style={{ backgroundImage: `url(${course.img})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
@@ -231,7 +235,10 @@ export default function CourseCard({
                   ? "opacity-100 scale-100 blur-0"
                   : "opacity-0 scale-95 blur-[2px]"
               }`}
-              style={{ transform: "translateZ(1px)" }}
+              style={{
+                transform: "translateZ(1px)",
+                WebkitTransform: "translateZ(1px)",
+              }}
             >
               {renderModel()}
             </div>
@@ -239,7 +246,10 @@ export default function CourseCard({
 
           <div
             className="relative z-10 flex-1"
-            style={{ transform: "translateZ(1px)" }}
+            style={{
+            transform: "translateZ(1px)",
+            WebkitTransform: "translateZ(1px)",
+          }}
           >
             <div className="mb-3">
               <h4 className="font-bold text-white mb-1 text-lg">

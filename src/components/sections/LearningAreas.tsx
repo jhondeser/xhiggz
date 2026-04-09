@@ -6,8 +6,20 @@ import { useRef } from "react";
 import { courses } from "@/data/cursos";
 import CourseCard from "@/components/common/CourseCards";
 import { SparklesIcon, AcademicCapIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 
 export default function LearningAreas() {
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeMobileCard, setActiveMobileCard] = useState<string | null>(null);
+  const [activeDesktopCard, setActiveDesktopCard] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
@@ -122,18 +134,46 @@ export default function LearningAreas() {
           variants={container}
           className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 max-w-7xl mx-auto"
         >
-          {courses
+        {courses
           .filter((course) => ["1", "3", "6"].includes(course.id))
-          .map((course) => (
-            <motion.div
-              key={course.slug}
-              variants={item}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group"
-            >
-              <CourseCard course={course} />
-            </motion.div>
-          ))}
+          .map((course) => {
+            const isFlipped = isMobile
+              ? activeMobileCard === course.id
+              : activeDesktopCard === course.id;
+
+            return (
+              <motion.div
+                key={course.slug}
+                variants={item}
+                whileHover={
+                  !isMobile ? { y: -8, transition: { duration: 0.3 } } : undefined
+                }
+                className="group"
+              >
+                <CourseCard
+                  course={course}
+                  isFlipped={isFlipped}
+                  onFlip={() => {
+                    if (isMobile) {
+                      setActiveMobileCard((prev) =>
+                        prev === course.id ? null : course.id
+                      );
+                    }
+                  }}
+                  onHoverStart={() => {
+                    if (!isMobile) setActiveDesktopCard(course.id);
+                  }}
+                  onHoverEnd={() => {
+                    if (!isMobile) {
+                      setActiveDesktopCard((prev) =>
+                        prev === course.id ? null : prev
+                      );
+                    }
+                  }}
+                />
+              </motion.div>
+            );
+                })}
         </motion.div>
 
         {/* Call to Action al final */}
