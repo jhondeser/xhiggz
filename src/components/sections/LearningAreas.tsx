@@ -61,7 +61,7 @@ export default function LearningAreas({ courses }: LearningAreasProps) {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     }
   };

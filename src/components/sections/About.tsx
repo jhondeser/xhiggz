@@ -181,7 +181,7 @@ export default function AboutSection() {
               transition={{ 
                 duration: 6, 
                 repeat: Infinity,
-                ease: "easeInOut" 
+                ease: "easeInOut" as const
               }}
               className="absolute -bottom-6 -left-6 bg-white/80 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-white/50"
             >

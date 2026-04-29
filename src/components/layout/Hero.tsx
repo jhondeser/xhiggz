@@ -72,7 +72,7 @@ export default function Hero() {
               duration: 4 + p.delay,
               delay: p.delay,
               repeat: Infinity,
-              ease: "easeInOut",
+              ease: "easeInOut" as const,
             }}
           />
         ))}
