@@ -1,9 +1,5 @@
 // src/data/instructors.ts
-export interface Instructor {
-  name: string;
-  avatar: string;
-  role?: string;
-}
+import type { Instructor } from "@/types";
 
 export const instructors: Instructor[] = [
   {

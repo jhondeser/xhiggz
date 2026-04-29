@@ -60,34 +60,16 @@ export interface Course {
 }
 
 export interface Instructor {
-  id: string;
-  nombre: string;
-  rol: string;
-  experiencia: string;
+  name: string;
   avatar: string;
-  redes: {
-    github?: string;
-    linkedin?: string;
-    twitter?: string;
-    portfolio?: string;
-  };
-  bio: string;
-  especialidades: string[];
-  cursos: string[];
-  calificacion: number;
+  role?: string;
 }
 
 export interface Testimonial {
-  id: string;
-  nombre: string;
-  curso: string;
-  mensaje: string;
+  name: string;
+  course: string;
+  message: string;
   avatar: string;
-  fecha?: string;
-  rating: number;
-  trabajo?: string;
-  empresa?: string;
-  destacado?: boolean;
 }
 
 export interface BlogPost {

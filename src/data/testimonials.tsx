@@ -1,10 +1,5 @@
-// src/data/testimonials.ts
-export interface Testimonial {
-  name: string;
-  course: string;
-  message: string;
-  avatar: string;
-}
+// src/data/testimonials.tsx
+import type { Testimonial } from "@/types";
 
 export const testimonials: Testimonial[] = [
   {
