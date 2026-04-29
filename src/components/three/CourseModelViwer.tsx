@@ -13,7 +13,7 @@ function AutoRotate({ children, isMobile }: { children: ReactNode; isMobile: boo
   useFrame((_, delta) => {
     if (!groupRef.current) return;
 
-    groupRef.current.rotation.y += delta * (isMobile ? 0.35 : 0.55);
+    groupRef.current.rotation.y += delta * (isMobile ? 0.2 : 0.3);
   });
 
   return <group ref={groupRef}>{children}</group>;
