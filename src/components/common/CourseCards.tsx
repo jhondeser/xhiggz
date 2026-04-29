@@ -1,16 +1,16 @@
 "use client";
 
-import { modelRegistry } from "@/components/three/modelRegistry";
-import { useState, useEffect } from "react";
+import { modelRegistry, preloadModel, type ModelKey } from "@/components/three/modelRegistry";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { Course } from "@/types";
 import {
-  ClockIcon,
-  AcademicCapIcon,
-  ChevronRightIcon,
-  SparklesIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/24/outline";
+  Clock,
+  GraduationCap,
+  ChevronRight,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
 
 interface CourseCardProps {
   course: Course;
@@ -33,6 +33,16 @@ export default function CourseCard({
   const [shouldLoadModel, setShouldLoadModel] = useState(false);
   const [modelReady, setModelReady] = useState(false);
   const router = useRouter();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Dispara la precarga del .glb correspondiente, si el curso tiene modelKey.
+  // Memorizado para que los handlers de hover/IntersectionObserver no
+  // recalculen y disparen efectos en cada render.
+  const triggerPreload = useCallback(() => {
+    if (course.modelKey) {
+      preloadModel(course.modelKey as ModelKey);
+    }
+  }, [course.modelKey]);
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768);
@@ -40,6 +50,30 @@ export default function CourseCard({
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  // Precarga cuando la card entra en el viewport. Cubre móviles (no hay hover)
+  // y también es respaldo para desktop si el usuario hace scroll directo a flippear.
+  useEffect(() => {
+    if (!course.modelKey) return;
+    const node = cardRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            triggerPreload();
+            observer.disconnect();
+            break;
+          }
+        }
+      },
+      { rootMargin: "200px" } // Empieza 200px antes de que aparezca en pantalla
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [course.modelKey, triggerPreload]);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -62,7 +96,10 @@ export default function CourseCard({
   }, [isFlipped]);
 
   const handleMouseEnter = () => {
-    if (!isMobile) onHoverStart?.();
+    if (!isMobile) {
+      onHoverStart?.();
+      triggerPreload();
+    }
   };
 
   const handleMouseLeave = () => {
@@ -93,6 +130,7 @@ export default function CourseCard({
 
   return (
     <div
+      ref={cardRef}
       className={`relative w-full h-[650px] ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -140,7 +178,7 @@ export default function CourseCard({
 
                 {course.destacado && (
                   <span className="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold rounded-full">
-                    <SparklesIcon className="w-3 h-3" />
+                    <Sparkles className="w-3 h-3" />
                     Destacado
                   </span>
                 )}
@@ -159,7 +197,7 @@ export default function CourseCard({
             <div className="flex items-center gap-3 mb-4">
               {course.nivel && (
                 <div className="flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
-                  <AcademicCapIcon className="w-4 h-4 text-cyan-300" />
+                  <GraduationCap className="w-4 h-4 text-cyan-300" />
                   <span className="text-white text-xs font-medium">
                     {course.nivel}
                   </span>
@@ -168,7 +206,7 @@ export default function CourseCard({
 
               {course.duracion && (
                 <div className="flex items-center gap-1 bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
-                  <ClockIcon className="w-4 h-4 text-purple-300" />
+                  <Clock className="w-4 h-4 text-purple-300" />
                   <span className="text-white text-xs font-medium">
                     {course.duracion}
                   </span>
@@ -197,7 +235,7 @@ export default function CourseCard({
                   <span className="text-xs hidden sm:inline">
                     {isMobile ? "Tocar" : "Ver más"}
                   </span>
-                  <ChevronRightIcon className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4" />
                 </div>
               </div>
             </div>
@@ -219,15 +257,39 @@ export default function CourseCard({
           <div className="absolute top-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-xl" />
 
           <div className="relative z-10 w-full h-[280px] mb-4 flex justify-center items-center bg-gradient-to-br from-gray-800 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden">
+            {/* POSTER: imagen del curso visible mientras el modelo no está listo.
+                Da feedback visual instantáneo al flippear, evitando el "negro"
+                durante los milisegundos de descarga + parseo del .glb. */}
+            <div
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${
+                modelReady ? "opacity-0" : "opacity-100"
+              }`}
+              style={{ backgroundImage: `url(${course.img})` }}
+              aria-hidden="true"
+            />
+
+            {/* Tinte sobre el poster para integrarlo con la estética
+                oscura de la tarjeta y suavizar el contraste con el modelo
+                cuando aparece encima. */}
             <div
               className={`absolute inset-0 transition-opacity duration-500 ${
                 modelReady ? "opacity-0" : "opacity-100"
               }`}
               style={{
                 background:
-                  "radial-gradient(circle at center, rgba(34,211,238,0.10), rgba(15,23,42,0.15) 40%, rgba(2,6,23,0.4) 100%)",
+                  "radial-gradient(circle at center, rgba(2,6,23,0.25), rgba(2,6,23,0.55) 70%, rgba(2,6,23,0.75) 100%)",
               }}
+              aria-hidden="true"
             />
+
+            {/* Indicador sutil de "cargando" — solo visible si la card ya
+                fue flippeada y el modelo aún no terminó de aparecer. */}
+            {shouldLoadModel && !modelReady && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full border border-white/10 z-20">
+                <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse" />
+                <span className="text-white/80 text-xs font-medium">Cargando modelo…</span>
+              </div>
+            )}
 
             <div
               className={`w-full h-full flex items-center justify-center transition-all duration-500 ${
@@ -303,7 +365,7 @@ export default function CourseCard({
                 className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg hover:from-cyan-600 hover:to-blue-700 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
               >
                 Ver Curso Completo
-                <ArrowRightIcon className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

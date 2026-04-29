@@ -145,7 +145,7 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
         >
           <motion.a
-            href="#cursos"
+            href="/cursos"
             whileHover={{ 
               scale: 1.05, 
               boxShadow: "0 10px 30px -10px rgba(59, 130, 246, 0.5)" 

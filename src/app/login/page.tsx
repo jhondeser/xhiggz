@@ -1,35 +1,35 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { 
-  WrenchScrewdriverIcon, 
-  CodeBracketIcon, 
-  RocketLaunchIcon,
-  CpuChipIcon,
-  ShieldCheckIcon,
-  BeakerIcon,
-  SparklesIcon,
-  ArrowPathIcon
-} from '@heroicons/react/24/outline';
+import {
+  Wrench,
+  Code2,
+  Rocket,
+  Cpu,
+  ShieldCheck,
+  Beaker,
+  Sparkles,
+  RefreshCw,
+} from 'lucide-react';
 
 const features = [
   {
-    icon: <CpuChipIcon className="h-8 w-8" />,
+    icon: <Cpu className="h-8 w-8" />,
     title: "Arquitectura Moderna",
     description: "Construido con Next.js 14 y React 18"
   },
   {
-    icon: <ShieldCheckIcon className="h-8 w-8" />,
+    icon: <ShieldCheck className="h-8 w-8" />,
     title: "Seguro y Estable",
     description: "Tipado TypeScript y validaciones robustas"
   },
   {
-    icon: <BeakerIcon className="h-8 w-8" />,
+    icon: <Beaker className="h-8 w-8" />,
     title: "En Constante Mejora",
     description: "Testing y optimizaciones continuas"
   },
   {
-    icon: <SparklesIcon className="h-8 w-8" />,
+    icon: <Sparkles className="h-8 w-8" />,
     title: "Experiencia Premium",
     description: "UI/UX cuidadosamente diseñada"
   }
@@ -67,7 +67,7 @@ export default function DesarrolloPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
           <div className="text-center">
             <div className="inline-flex items-center justify-center p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl mb-6">
-              <WrenchScrewdriverIcon className="h-12 w-12 text-cyan-400" />
+              <Wrench className="h-12 w-12 text-cyan-400" />
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -121,7 +121,7 @@ export default function DesarrolloPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700">
           <div className="flex items-center gap-3 mb-8">
-            <ArrowPathIcon className="h-8 w-8 text-cyan-400" />
+            <RefreshCw className="h-8 w-8 text-cyan-400" />
             <h2 className="text-2xl font-bold">Estado del Desarrollo</h2>
           </div>
           
@@ -147,7 +147,7 @@ export default function DesarrolloPage() {
       {/* CTA Section */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         <div className="inline-flex items-center justify-center p-4 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl mb-6">
-          <RocketLaunchIcon className="h-12 w-12 text-cyan-400" />
+          <Rocket className="h-12 w-12 text-cyan-400" />
         </div>
         
         <h2 className="text-3xl font-bold mb-4">¡Pronto estaremos listos!</h2>
@@ -176,7 +176,7 @@ export default function DesarrolloPage() {
       <div className="border-t border-gray-800 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <CodeBracketIcon className="h-6 w-6 text-gray-400" />
+            <Code2 className="h-6 w-6 text-gray-400" />
             <span className="text-gray-400">
               Desarrollado con ❤️ usando Next.js & Tailwind CSS
             </span>

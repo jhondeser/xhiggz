@@ -6,8 +6,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { testimonials } from "@/data/testimonials";
-import { StarIcon } from "@heroicons/react/24/solid";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Testimonials() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -120,7 +119,7 @@ export default function Testimonials() {
             variants={item}
             className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-medium mb-6"
           >
-            <StarIcon className="w-4 h-4" />
+            <Star className="w-4 h-4" />
             Testimonios Reales
           </motion.div>
 
@@ -157,7 +156,7 @@ export default function Testimonials() {
               className="p-3 rounded-full bg-white shadow-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 hover:scale-110 group"
               aria-label="Testimonio anterior"
             >
-              <ChevronLeftIcon className="w-6 h-6 text-gray-600 group-hover:text-cyan-600" />
+              <ChevronLeft className="w-6 h-6 text-gray-600 group-hover:text-cyan-600" />
             </button>
             
             <button
@@ -165,7 +164,7 @@ export default function Testimonials() {
               className="p-3 rounded-full bg-white shadow-lg border border-gray-200 hover:bg-gray-50 transition-all duration-300 hover:scale-110 group"
               aria-label="Siguiente testimonio"
             >
-              <ChevronRightIcon className="w-6 h-6 text-gray-600 group-hover:text-cyan-600" />
+              <ChevronRight className="w-6 h-6 text-gray-600 group-hover:text-cyan-600" />
             </button>
           </div>
 
@@ -209,7 +208,7 @@ export default function Testimonials() {
                           className="rounded-2xl border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-300"
                         />
                         <div className="absolute -bottom-2 -right-2 bg-cyan-500 rounded-full p-1 shadow-lg">
-                          <StarIcon className="w-4 h-4 text-white" />
+                          <Star className="w-4 h-4 text-white" />
                         </div>
                       </div>
                       <div className="text-left">
@@ -217,7 +216,7 @@ export default function Testimonials() {
                         <p className="text-cyan-600 font-medium">{testimonial.course}</p>
                         <div className="flex gap-1 mt-1">
                           {[...Array(5)].map((_, i) => (
-                            <StarIcon key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                            <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                           ))}
                         </div>
                       </div>

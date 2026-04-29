@@ -3,11 +3,11 @@
 
 import { motion } from "framer-motion";
 import {
-  ChatBubbleOvalLeftIcon,
-  UsersIcon,
-  CalendarDaysIcon,
-  HeartIcon,
-} from "@heroicons/react/24/outline";
+  MessageCircle,
+  Users,
+  CalendarDays,
+  Heart,
+} from "lucide-react";
 
 interface Feature {
   title: string;
@@ -22,7 +22,7 @@ const features: Feature[] = [
     title: "Discord Oficial",
     description:
       "Únete a nuestro servidor para charlas, dudas y proyectos en tiempo real.",
-    icon: ChatBubbleOvalLeftIcon,
+    icon: MessageCircle,
     url: "https://discord.gg/V72sV6mP",
     image: "/images/comunidad/dicord_blog.png",
   },
@@ -30,7 +30,7 @@ const features: Feature[] = [
     title: "Encuentros Mensuales",
     description:
       "Webinars y meetups para compartir avances y aprender en comunidad.",
-    icon: CalendarDaysIcon,
+    icon: CalendarDays,
     url: "/eventos",
     image: "/images/comunidad/Encuentros-bg.png",
   },
@@ -38,14 +38,14 @@ const features: Feature[] = [
     title: "Foro de Ayuda",
     description:
       "Plantea tus preguntas y obtén respuestas de instructores y compañeros.",
-    icon: UsersIcon,
+    icon: Users,
     url: "/foro",
     image: "/images/comunidad/support-bg.jpg",
   },
   {
     title: "Proyectos Colaborativos",
     description: "Participa en iniciativas abiertas y construye en equipo.",
-    icon: HeartIcon,
+    icon: Heart,
     url: "/colaboracion",
     image: "/images/comunidad/coloboremos-bg_cambio.jpg",
   },

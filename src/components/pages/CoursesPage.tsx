@@ -4,15 +4,19 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CoursesHeader from "./CoursesHeader";
 import ContactForm from "@/components/sections/ContactForm";
-import { courses } from "@/data/cursos";
+import type { Course } from "@/types";
 import CourseCard from "@/components/common/CourseCards";
 import {
-  MagnifyingGlassIcon,
-  XMarkIcon,
-  FunnelIcon,
-} from "@heroicons/react/24/outline";
+  Search,
+  X,
+  Filter,
+} from "lucide-react";
 
-export default function CoursesPage() {
+interface CoursesPageProps {
+  courses: Course[];
+}
+
+export default function CoursesPage({ courses }: CoursesPageProps) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -30,7 +34,7 @@ export default function CoursesPage() {
 
   const categories = useMemo(
     () => ["Todas", ...Array.from(new Set(courses.map((c) => c.categoria)))],
-    []
+    [courses]
   );
 
   const filtered = useMemo(() => {
@@ -47,7 +51,7 @@ export default function CoursesPage() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [query, activeCategory]);
+  }, [query, activeCategory, courses]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -92,7 +96,7 @@ export default function CoursesPage() {
               variants={itemVariants}
               className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-medium mb-6"
             >
-              <FunnelIcon className="w-4 h-4" />
+              <Filter className="w-4 h-4" />
               Explora Nuestros Cursos
             </motion.div>
 
@@ -117,7 +121,7 @@ export default function CoursesPage() {
 
           <motion.div variants={itemVariants} className="max-w-2xl mx-auto mb-8">
             <div className="relative">
-              <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
+              <Search className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
               <input
                 type="search"
                 placeholder="Buscar cursos por nombre, descripción o categoría..."
@@ -130,7 +134,7 @@ export default function CoursesPage() {
                   onClick={() => setQuery("")}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <XMarkIcon className="w-5 h-5" />
+                  <X className="w-5 h-5" />
                 </button>
               )}
             </div>
@@ -142,7 +146,7 @@ export default function CoursesPage() {
               className="md:hidden w-full bg-white border border-gray-200 rounded-2xl p-4 flex items-center justify-between shadow-sm mb-4"
             >
               <span className="flex items-center gap-2 text-gray-700">
-                <FunnelIcon className="w-4 h-4" />
+                <Filter className="w-4 h-4" />
                 Filtros: {activeCategory}
               </span>
               <span className="text-cyan-600 font-semibold">
@@ -208,7 +212,7 @@ export default function CoursesPage() {
                   className="text-center py-16"
                 >
                   <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <MagnifyingGlassIcon className="w-10 h-10 text-gray-400" />
+                    <Search className="w-10 h-10 text-gray-400" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
                     No se encontraron cursos

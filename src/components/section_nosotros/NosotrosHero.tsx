@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDown } from 'lucide-react';
 
 interface HeroProps {
   title?: string;
@@ -179,7 +179,7 @@ const NosotrosHero: React.FC<HeroProps> = ({
           className="flex flex-col items-center gap-2 text-gray-400"
         >
           <span className="text-sm">Descubre más</span>
-          <ChevronDownIcon className="w-6 h-6" />
+          <ChevronDown className="w-6 h-6" />
         </motion.div>
       </motion.div>
     </section>

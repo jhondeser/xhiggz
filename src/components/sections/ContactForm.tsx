@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { EnvelopeIcon, UserIcon, ChatBubbleLeftRightIcon, AcademicCapIcon } from "@heroicons/react/24/outline";
+import { Mail, User, MessagesSquare, GraduationCap } from "lucide-react";
 
 export default function ContactForm() {
   const [form, setForm] = useState({
@@ -122,7 +122,7 @@ export default function ContactForm() {
           {/* Header */}
           <motion.div variants={itemVariants} className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <EnvelopeIcon className="w-4 h-4" />
+              <Mail className="w-4 h-4" />
               Comienza Tu Viaje
             </div>
             
@@ -149,7 +149,7 @@ export default function ContactForm() {
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-cyan-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <AcademicCapIcon className="w-6 h-6 text-cyan-600" />
+                      <GraduationCap className="w-6 h-6 text-cyan-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Aprendizaje 100% Práctico</h4>
@@ -159,7 +159,7 @@ export default function ContactForm() {
                   
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <UserIcon className="w-6 h-6 text-purple-600" />
+                      <User className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Mentoría Personalizada</h4>
@@ -169,7 +169,7 @@ export default function ContactForm() {
                   
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <ChatBubbleLeftRightIcon className="w-6 h-6 text-blue-600" />
+                      <MessagesSquare className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-1">Comunidad Global</h4>
@@ -200,7 +200,7 @@ export default function ContactForm() {
             >
               <div className="space-y-4">
                 <div className="relative">
-                  <UserIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
+                  <User className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
                   <input
                     type="text"
                     name="name"
@@ -213,7 +213,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="relative">
-                  <EnvelopeIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
+                  <Mail className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
                   <input
                     type="email"
                     name="email"
@@ -226,7 +226,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="relative">
-                  <AcademicCapIcon className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
+                  <GraduationCap className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
                   <select
                     name="area"
                     value={form.area}
@@ -244,7 +244,7 @@ export default function ContactForm() {
                 </div>
 
                 <div className="relative">
-                  <ChatBubbleLeftRightIcon className="w-5 h-5 text-gray-400 absolute left-4 top-4" />
+                  <MessagesSquare className="w-5 h-5 text-gray-400 absolute left-4 top-4" />
                   <textarea
                     name="message"
                     placeholder="Cuéntanos más sobre tus objetivos, experiencia previa o cualquier pregunta que tengas..."

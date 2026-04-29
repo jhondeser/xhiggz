@@ -7,17 +7,17 @@ import { Course } from "@/types";
 import InstructorsSection from "./InstructorsSection";
 import { modelRegistry } from "@/components/three/modelRegistry";
 import {
-  ArrowLeftIcon,
-  AcademicCapIcon,
-  CheckCircleIcon,
-  CurrencyDollarIcon,
-  ClockIcon,
-  UsersIcon,
-  RocketLaunchIcon,
-  BookOpenIcon,
-  WrenchScrewdriverIcon,
-} from "@heroicons/react/24/outline";
-import { StarIcon } from "@heroicons/react/24/solid";
+  ArrowLeft,
+  GraduationCap,
+  CheckCircle2,
+  DollarSign,
+  Clock,
+  Users,
+  Rocket,
+  BookOpen,
+  Wrench,
+  Star,
+} from "lucide-react";
 
 interface Props {
   course: Course;
@@ -26,19 +26,19 @@ interface Props {
 export default function CourseDetailContent({ course }: Props) {
   const features = [
     course.accesoVitalicio && {
-      icon: <AcademicCapIcon className="w-5 h-5" />,
+      icon: <GraduationCap className="w-5 h-5" />,
       text: "Acceso de por vida",
     },
     course.certificado && {
-      icon: <CheckCircleIcon className="w-5 h-5" />,
+      icon: <CheckCircle2 className="w-5 h-5" />,
       text: "Certificado incluido",
     },
     course.comunidad && {
-      icon: <UsersIcon className="w-5 h-5" />,
+      icon: <Users className="w-5 h-5" />,
       text: "Comunidad",
     },
     course.soporte && {
-      icon: <RocketLaunchIcon className="w-5 h-5" />,
+      icon: <Rocket className="w-5 h-5" />,
       text: "Soporte",
     },
   ].filter(Boolean) as { icon: React.ReactNode; text: string }[];
@@ -69,7 +69,7 @@ export default function CourseDetailContent({ course }: Props) {
               href="/cursos"
               className="inline-flex items-center gap-2 text-sm sm:text-base text-cyan-600 hover:text-cyan-700 font-medium group transition-colors"
             >
-              <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Volver a todos los cursos
             </Link>
           </motion.div>
@@ -99,7 +99,7 @@ export default function CourseDetailContent({ course }: Props) {
                 {course.rating && (
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <StarIcon
+                      <Star
                         key={i}
                         className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 fill-current"
                       />
@@ -113,7 +113,7 @@ export default function CourseDetailContent({ course }: Props) {
                 {typeof course.estudiantes === "number" && (
                   <div className="flex items-center gap-2 text-gray-700">
                     <span className="text-gray-400 hidden sm:inline">•</span>
-                    <UsersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                     <span>
                       {course.estudiantes > 0
                         ? `${course.estudiantes}+ estudiantes`
@@ -126,21 +126,21 @@ export default function CourseDetailContent({ course }: Props) {
               <div className="flex flex-wrap gap-3">
                 {course.duracion && (
                   <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
-                    <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
                     <span className="text-gray-700">{course.duracion}</span>
                   </div>
                 )}
 
                 {course.nivel && (
                   <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
-                    <AcademicCapIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
                     <span className="text-gray-700">{course.nivel}</span>
                   </div>
                 )}
 
                 {course.contenido?.modulos && (
                   <div className="flex items-center gap-2 bg-white px-3 py-2 sm:px-4 rounded-xl border border-gray-200 text-sm sm:text-base">
-                    <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
+                    <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
                     <span className="text-gray-700">
                       {course.contenido.modulos} módulos
                     </span>
@@ -231,7 +231,7 @@ export default function CourseDetailContent({ course }: Props) {
             className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8"
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <CheckCircleIcon className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4" />
               Lo que aprenderás
             </div>
 
@@ -243,7 +243,7 @@ export default function CourseDetailContent({ course }: Props) {
               {course.objetivos?.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircleIcon className="w-3 h-3 text-green-600" />
+                    <CheckCircle2 className="w-3 h-3 text-green-600" />
                   </div>
                   <span className="text-gray-700">{item}</span>
                 </li>
@@ -260,7 +260,7 @@ export default function CourseDetailContent({ course }: Props) {
             className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8"
           >
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <WrenchScrewdriverIcon className="w-4 h-4" />
+              <Wrench className="w-4 h-4" />
               Requisitos
             </div>
 
@@ -272,7 +272,7 @@ export default function CourseDetailContent({ course }: Props) {
               {course.requisitos?.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <CheckCircleIcon className="w-3 h-3 text-blue-600" />
+                    <CheckCircle2 className="w-3 h-3 text-blue-600" />
                   </div>
                   <span className="text-gray-700">{item}</span>
                 </li>
@@ -292,7 +292,7 @@ export default function CourseDetailContent({ course }: Props) {
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
-                <CurrencyDollarIcon className="w-4 h-4" />
+                <DollarSign className="w-4 h-4" />
                 Inversión
               </div>
 
@@ -349,7 +349,7 @@ export default function CourseDetailContent({ course }: Props) {
             className="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 lg:p-10"
           >
             <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <BookOpenIcon className="w-4 h-4" />
+              <BookOpen className="w-4 h-4" />
               Temario del curso
             </div>
 
@@ -383,7 +383,7 @@ export default function CourseDetailContent({ course }: Props) {
                         key={temaIndex}
                         className="flex items-start gap-3 text-gray-700 bg-slate-50 rounded-xl px-4 py-3"
                       >
-                        <CheckCircleIcon className="w-5 h-5 text-cyan-500 flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-5 h-5 text-cyan-500 flex-shrink-0 mt-0.5" />
                         <span>{tema}</span>
                       </li>
                     ))}
@@ -407,7 +407,7 @@ export default function CourseDetailContent({ course }: Props) {
               <ul className="space-y-4">
                 {course.beneficios.map((beneficio, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <CheckCircleIcon className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-700">{beneficio}</span>
                   </li>
                 ))}

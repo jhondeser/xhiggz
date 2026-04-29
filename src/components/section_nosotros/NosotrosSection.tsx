@@ -6,16 +6,16 @@ import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
-import { 
-  AcademicCapIcon, 
-  LightBulbIcon, 
-  UsersIcon, 
-  GlobeAltIcon, 
-  RocketLaunchIcon, 
-  LockClosedIcon,
-  HeartIcon,
-  SparklesIcon
-} from '@heroicons/react/24/outline';
+import {
+  GraduationCap,
+  Lightbulb,
+  Users,
+  Globe,
+  Rocket,
+  Lock,
+  Heart,
+  Sparkles,
+} from 'lucide-react';
 
 // Animaciones compartidas
 const containerVariants = {
@@ -86,7 +86,7 @@ export const QuienesSomosSection: React.FC = () => (
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <motion.div variants={itemVariants} className="space-y-6">
           <div className="inline-flex items-center gap-2 bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <SparklesIcon className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" />
             Conoce Nuestra Esencia
           </div>
           
@@ -138,7 +138,7 @@ export const QuienesSomosSection: React.FC = () => (
 
         <motion.div variants={itemVariants} className="relative">
           <div className="bg-gradient-to-br from-blue-500 to-cyan-400 rounded-3xl p-8 text-white shadow-2xl">
-            <AcademicCapIcon className="w-32 h-32 mx-auto mb-6" />
+            <GraduationCap className="w-32 h-32 mx-auto mb-6" />
             <div className="text-center space-y-4">
               <h3 className="text-2xl font-bold">Para Todos los Niveles</h3>
               <p className="text-blue-100">
@@ -176,7 +176,7 @@ export const MisionSection: React.FC = () => (
     <div className="container mx-auto px-4 relative z-10">
       <motion.div variants={itemVariants} className="max-w-4xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
-          <HeartIcon className="w-4 h-4" />
+          <Heart className="w-4 h-4" />
           Nuestro Propósito
         </div>
         
@@ -225,7 +225,7 @@ export const VisionSection: React.FC = () => (
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <motion.div variants={itemVariants} className="order-2 lg:order-1">
           <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl p-8 text-white shadow-2xl text-center">
-            <GlobeAltIcon className="w-32 h-32 mx-auto mb-6" />
+            <Globe className="w-32 h-32 mx-auto mb-6" />
             <h3 className="text-2xl font-bold mb-4">Visión Global</h3>
             <p className="text-purple-100">
               Construyendo puentes digitales que conecten talento hispanohablante con oportunidades mundiales
@@ -235,7 +235,7 @@ export const VisionSection: React.FC = () => (
 
         <motion.div variants={itemVariants} className="space-y-6 order-1 lg:order-2">
           <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium">
-            <RocketLaunchIcon className="w-4 h-4" />
+            <Rocket className="w-4 h-4" />
             Mirando al Futuro
           </div>
           
@@ -282,7 +282,7 @@ export const VisionSection: React.FC = () => (
 const valores = [
   { 
     title: 'Creatividad', 
-    Icon: LightBulbIcon, 
+    Icon: Lightbulb, 
     description: 'Transformamos el aprendizaje en un acto de creación. Cada proyecto es una expresión única de tu potencial.',
     color: 'from-yellow-400 to-orange-400',
     bgColor: 'bg-orange-50',
@@ -290,7 +290,7 @@ const valores = [
   },
   { 
     title: 'Colaboración', 
-    Icon: UsersIcon, 
+    Icon: Users, 
     description: 'Crecemos juntos. Tu éxito es nuestro éxito, y cada logro individual celebra a la comunidad.',
     color: 'from-blue-400 to-cyan-400',
     bgColor: 'bg-blue-50',
@@ -298,7 +298,7 @@ const valores = [
   },
   { 
     title: 'Innovación', 
-    Icon: GlobeAltIcon, 
+    Icon: Globe, 
     description: 'Mantenemos la vanguardia tecnológica. IA, Web3 y herramientas emergentes integradas en cada ruta.',
     color: 'from-green-400 to-emerald-400',
     bgColor: 'bg-green-50',
@@ -306,7 +306,7 @@ const valores = [
   },
   { 
     title: 'Expansión', 
-    Icon: RocketLaunchIcon, 
+    Icon: Rocket, 
     description: 'Rompiendo límites geográficos y mentales. Tu aprendizaje no conoce fronteras.',
     color: 'from-purple-400 to-pink-400',
     bgColor: 'bg-purple-50',
@@ -314,7 +314,7 @@ const valores = [
   },
   { 
     title: 'Accesibilidad', 
-    Icon: LockClosedIcon, 
+    Icon: Lock, 
     description: 'La educación de calidad como derecho, no privilegio. Programas inclusivos para todos.',
     color: 'from-gray-400 to-blue-400',
     bgColor: 'bg-gray-50',
@@ -331,7 +331,7 @@ export const ValoresSection: React.FC = () => (
     <div className="container mx-auto px-4 relative z-10">
       <motion.div variants={itemVariants} className="text-center mb-16">
         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-4">
-          <SparklesIcon className="w-4 h-4" />
+          <Sparkles className="w-4 h-4" />
           Nuestra Esencia
         </div>
         <h2 className="text-5xl font-bold mb-4">Valores que Nos Definen</h2>

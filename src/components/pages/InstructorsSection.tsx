@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Instructor, instructors } from "@/data/instructors";
+import type { Instructor } from "@/types";
+import { instructors } from "@/data/instructors";
 
 export default function InstructorsSection() {
   return (
