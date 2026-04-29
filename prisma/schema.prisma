@@ -15,6 +15,13 @@ enum Role {
   ADMIN
 }
 
+enum Nivel {
+  Principiante
+  Intermedio
+  Avanzado
+  TodosLosNiveles
+}
+
 model User {
   id         Int        @id @default(autoincrement())
   name       String
@@ -30,18 +37,89 @@ model User {
 }
 
 model Course {
-  id           Int           @id @default(autoincrement())
-  title        String
-  description  String?
-  publishedAt  DateTime?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id          Int     @id @default(autoincrement())
+  slug        String  @unique
+  title       String
+  description String
+  emoji       String?
+  modelKey    String?
+  categoria   String
+  img         String
 
-  instructorId Int
-  instructor   User          @relation("InstructorCourses", fields: [instructorId], references: [id])
+  // Metadatos pedagógicos
+  nivel       Nivel?
+  duracion    String?
+  rating      Float?
+  estudiantes Int       @default(0)
+  destacado   Boolean   @default(false)
+  tags        String[]  @default([])
 
+  // Precio (denormalizado: cada curso tiene exactamente un precio)
+  precioMensual  Float?
+  precioCompleto Float?
+  precioMoneda   String? @default("€")
+
+  // Contenido (denormalizado)
+  modulosCount   Int?
+  horas          Int?
+  proyectosCount Int?
+
+  // Listas
+  requisitos String[] @default([])
+  objetivos  String[] @default([])
+  beneficios String[] @default([])
+
+  // Booleanos
+  certificado     Boolean @default(false)
+  accesoVitalicio Boolean @default(false)
+  soporte         Boolean @default(false)
+  comunidad       Boolean @default(false)
+
+  // Estadísticas (denormalizado)
+  satisfaccion  Float?
+  empleabilidad Float?
+  completacion  Float?
+
+  // Calendario
+  fechaInicio DateTime?
+  fechaFin    DateTime?
+
+  // Instructor — datos de display (no requieren un User registrado)
+  instructorNombre      String?
+  instructorAvatar      String?
+  instructorRol         String?
+  instructorExperiencia String?
+
+  // Relación opcional a User (para futuro panel de instructores autenticados).
+  // Hoy puede quedar en null y mostrarse con los campos instructor* anteriores.
+  instructorId Int?
+  instructor   User? @relation("InstructorCourses", fields: [instructorId], references: [id])
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relaciones
+  temario      CourseModule[]
   enrollments  Enrollment[]
   testimonials Testimonial[]
+
+  @@index([categoria])
+  @@index([destacado])
+  @@index([nivel])
+}
+
+model CourseModule {
+  id      Int      @id @default(autoincrement())
+  modulo  String
+  semanas String
+  temas   String[] @default([])
+  orden   Int      @default(0)
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
 }
 
 model Enrollment {
@@ -57,10 +135,10 @@ model Enrollment {
 }
 
 model Testimonial {
-  id         Int      @id @default(autoincrement())
-  content    String
-  rating     Int      @default(5)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  content   String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
 
   authorId Int
   courseId Int

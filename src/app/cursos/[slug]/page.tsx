@@ -1,38 +1,37 @@
 import { notFound } from "next/navigation";
-import { courses } from "@/data/cursos";
+import type { Metadata } from "next";
 import CourseDetailContent from "@/components/pages/CourseDetailContent";
-import type { Metadata } from 'next';
+import { getCourseBySlug, getCourseSlugs } from "@/server/courses";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams(): { slug: string }[] {
-  return courses.map((c) => ({ slug: c.slug }));
+// Pre-genera estáticamente todas las rutas de cursos en build time.
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const slugs = await getCourseSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function CoursePage({ params }: Props) {
   const { slug } = await params;
-  const course = courses.find((c) => c.slug === slug);
-  
+  const course = await getCourseBySlug(slug);
+
   if (!course) return notFound();
 
   return <CourseDetailContent course={course} />;
 }
 
-// Opcional: Agregar metadata dinámica
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const course = courses.find((c) => c.slug === slug);
-  
+  const course = await getCourseBySlug(slug);
+
   if (!course) {
-    return {
-      title: 'Curso no encontrado',
-    };
+    return { title: "Curso no encontrado" };
   }
 
   return {
-    title: course.title,
+    title:       course.title,
     description: course.description,
   };
 }

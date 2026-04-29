@@ -3,13 +3,16 @@ import AboutSection from "@/components/sections/About";
 import LearningAreas from "@/components/sections/LearningAreas";
 import Testimonials from "@/components/sections/Testimonials";
 import ContactForm from "@/components/sections/ContactForm";
+import { getCourses } from "@/server/courses";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const courses = await getCourses();
+
   return (
-    < >
+    <>
       <Hero />
       <AboutSection />
-      <LearningAreas />
+      <LearningAreas courses={courses} />
       <Testimonials />
       <ContactForm />
     </>
