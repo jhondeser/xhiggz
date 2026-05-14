@@ -84,7 +84,13 @@ async function loadStripeProducts(): Promise<ProductPrices[]> {
 }
 
 interface MatchResult {
-  course: { id: number; slug: string; title: string };
+  course: {
+    id: number;
+    slug: string;
+    title: string;
+    stripePriceIdMonthly: string | null;
+    stripePriceIdYearly: string | null;
+  };
   product: ProductPrices;
   reason: "metadata" | "title" | "name-contains-slug";
 }
