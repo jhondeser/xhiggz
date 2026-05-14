@@ -1,0 +1,234 @@
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import type { SubscriptionStatus } from "@prisma/client";
+
+export const dynamic = "force-dynamic";
+
+const PER_PAGE = 25;
+
+interface SP {
+  page?: string;
+  status?: string;
+  course?: string;
+  q?: string;
+}
+
+async function getData(sp: SP) {
+  const page = Math.max(1, Number(sp.page) || 1);
+  const status = (sp.status as SubscriptionStatus | "") || undefined;
+  const courseId = sp.course ? Number(sp.course) : undefined;
+  const q = sp.q?.trim() || undefined;
+
+  const where = {
+    ...(status ? { status } : {}),
+    ...(courseId ? { courseId } : {}),
+    ...(q
+      ? { user: { email: { contains: q, mode: "insensitive" as const } } }
+      : {}),
+  };
+
+  const [total, rows, courses] = await Promise.all([
+    prisma.subscription.count({ where }),
+    prisma.subscription.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: PER_PAGE,
+      skip: (page - 1) * PER_PAGE,
+      include: {
+        course: { select: { title: true } },
+        user: { select: { name: true, email: true } },
+      },
+    }),
+    prisma.course.findMany({
+      select: { id: true, title: true },
+      orderBy: { id: "asc" },
+    }),
+  ]);
+
+  return { rows, total, page, courses, status, courseId, q };
+}
+
+function StatusBadge({ status }: { status: SubscriptionStatus }) {
+  const colors: Record<SubscriptionStatus, string> = {
+    ACTIVE: "bg-emerald-900/40 text-emerald-300 border-emerald-800",
+    TRIALING: "bg-sky-900/40 text-sky-300 border-sky-800",
+    PAST_DUE: "bg-amber-900/40 text-amber-300 border-amber-800",
+    UNPAID: "bg-red-900/40 text-red-300 border-red-800",
+    CANCELED: "bg-slate-800 text-slate-400 border-slate-700",
+    INCOMPLETE: "bg-purple-900/40 text-purple-300 border-purple-800",
+    INCOMPLETE_EXPIRED: "bg-slate-800 text-slate-500 border-slate-700",
+  };
+  return (
+    <span
+      className={`inline-block px-2 py-0.5 rounded-md text-xs border ${colors[status]}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+const ALL_STATUSES: SubscriptionStatus[] = [
+  "ACTIVE",
+  "TRIALING",
+  "PAST_DUE",
+  "UNPAID",
+  "CANCELED",
+  "INCOMPLETE",
+  "INCOMPLETE_EXPIRED",
+];
+
+export default async function SubscriptionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SP>;
+}) {
+  const sp = await searchParams;
+  const { rows, total, page, courses, status, courseId, q } = await getData(sp);
+  const lastPage = Math.max(1, Math.ceil(total / PER_PAGE));
+
+  function buildLink(next: number) {
+    const params = new URLSearchParams();
+    params.set("page", String(next));
+    if (status) params.set("status", status);
+    if (courseId) params.set("course", String(courseId));
+    if (q) params.set("q", q);
+    return `?${params.toString()}`;
+  }
+
+  return (
+    <div className="max-w-6xl">
+      <header className="mb-6">
+        <h1 className="text-3xl font-semibold">Subscriptions</h1>
+        <p className="text-slate-400 text-sm mt-1">
+          Suscripciones mensuales por curso. {total.toLocaleString("es-ES")}{" "}
+          totales con los filtros actuales.
+        </p>
+      </header>
+
+      <form className="flex gap-3 mb-4 flex-wrap" method="GET">
+        <input
+          name="q"
+          defaultValue={q ?? ""}
+          placeholder="Buscar por email…"
+          className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm min-w-[220px]"
+        />
+        <select
+          name="status"
+          defaultValue={status ?? ""}
+          className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm"
+        >
+          <option value="">Todos los status</option>
+          {ALL_STATUSES.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+        <select
+          name="course"
+          defaultValue={courseId ?? ""}
+          className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm"
+        >
+          <option value="">Todos los cursos</option>
+          {courses.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.title}
+            </option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          className="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-lg px-4 py-2"
+        >
+          Filtrar
+        </button>
+        <Link
+          href="/admin/subscriptions"
+          className="text-slate-400 hover:text-slate-100 text-sm self-center"
+        >
+          Limpiar
+        </Link>
+      </form>
+
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-slate-950 text-slate-400 text-xs uppercase tracking-wide">
+            <tr>
+              <th className="text-left px-4 py-3">Inicio</th>
+              <th className="text-left px-4 py-3">Email</th>
+              <th className="text-left px-4 py-3">Curso</th>
+              <th className="text-left px-4 py-3">Status</th>
+              <th className="text-left px-4 py-3">Periodo actual</th>
+              <th className="text-left px-4 py-3">Cancelación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-center text-slate-500 py-12">
+                  Sin resultados con esos filtros.
+                </td>
+              </tr>
+            ) : (
+              rows.map((s) => (
+                <tr
+                  key={s.id}
+                  className="border-t border-slate-800 hover:bg-slate-800/30"
+                >
+                  <td className="px-4 py-3 text-slate-400 whitespace-nowrap text-xs">
+                    {new Date(s.createdAt).toLocaleDateString("es-ES")}
+                  </td>
+                  <td className="px-4 py-3">{s.user.email}</td>
+                  <td className="px-4 py-3 text-slate-300">
+                    {s.course?.title ?? "—"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <StatusBadge status={s.status} />
+                  </td>
+                  <td className="px-4 py-3 text-slate-400 whitespace-nowrap text-xs">
+                    {new Date(s.currentPeriodStart).toLocaleDateString("es-ES")}{" "}
+                    →{" "}
+                    {new Date(s.currentPeriodEnd).toLocaleDateString("es-ES")}
+                  </td>
+                  <td className="px-4 py-3 text-slate-400 whitespace-nowrap text-xs">
+                    {s.canceledAt
+                      ? `cancelada ${new Date(s.canceledAt).toLocaleDateString("es-ES")}`
+                      : s.cancelAt
+                        ? `programada ${new Date(s.cancelAt).toLocaleDateString("es-ES")}`
+                        : "—"}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {lastPage > 1 && (
+        <div className="flex justify-between items-center mt-4 text-sm">
+          <div className="text-slate-500">
+            Página {page} de {lastPage}
+          </div>
+          <div className="flex gap-2">
+            {page > 1 && (
+              <Link
+                href={buildLink(page - 1)}
+                className="px-3 py-1 rounded-lg border border-slate-700 hover:bg-slate-800"
+              >
+                ← Anterior
+              </Link>
+            )}
+            {page < lastPage && (
+              <Link
+                href={buildLink(page + 1)}
+                className="px-3 py-1 rounded-lg border border-slate-700 hover:bg-slate-800"
+              >
+                Siguiente →
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
