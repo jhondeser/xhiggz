@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Course } from "@/types";
 import InstructorsSection from "./InstructorsSection";
 import { modelRegistry } from "@/components/three/modelRegistry";
+import BuyButton from "@/components/checkout/BuyButton";
 import {
   ArrowLeft,
   GraduationCap,
@@ -176,15 +177,13 @@ export default function CourseDetailContent({ course }: Props) {
               )}
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
-                <Link
-                  href="/inscripcion"
-                  className="group w-full sm:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3.5 sm:py-4 px-5 sm:px-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 sm:hover:scale-105 inline-flex items-center justify-center gap-3 text-sm sm:text-base"
-                >
-                  <span>🚀 Inscribirme Ahora</span>
-                  <span className="group-hover:translate-x-1 transition-transform">
-                    →
-                  </span>
-                </Link>
+                <BuyButton
+                  slug={course.slug}
+                  plan="yearly"
+                  source={`hero:${course.slug}`}
+                  variant="primary"
+                  label="🚀 Inscribirme Ahora"
+                />
 
                 <Link
                   href="/contacto"
@@ -298,41 +297,57 @@ export default function CourseDetailContent({ course }: Props) {
 
               <h2 className="text-2xl font-bold mb-6">Elige cómo empezar</h2>
 
-              <div className="space-y-6 mb-8">
+              <div className="space-y-4">
                 {course.precio?.completo && (
-                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
-                    <div className="text-4xl font-bold mb-2">
-                      {moneda}
-                      {course.precio.completo}
+                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl space-y-4">
+                    <div>
+                      <div className="text-4xl font-bold mb-1">
+                        {moneda}
+                        {course.precio.completo}
+                      </div>
+                      <div className="text-cyan-100 text-sm">
+                        Pago único · Acceso 1 año
+                      </div>
                     </div>
-                    <div className="text-cyan-100">Pago completo</div>
+
+                    <BuyButton
+                      slug={course.slug}
+                      plan="yearly"
+                      source={`pricing-yearly:${course.slug}`}
+                      variant="white"
+                      label="🎓 Acceso 1 año"
+                    />
                   </div>
                 )}
 
                 {course.precio?.mensual && (
-                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl">
-                    <div className="text-4xl font-bold mb-2">
-                      {moneda}
-                      {course.precio.mensual}/mes
+                  <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl space-y-4">
+                    <div>
+                      <div className="text-4xl font-bold mb-1">
+                        {moneda}
+                        {course.precio.mensual}
+                        <span className="text-xl font-medium">/mes</span>
+                      </div>
+                      <div className="text-cyan-100 text-sm">
+                        Suscripción · Cancela cuando quieras
+                      </div>
                     </div>
-                    <div className="text-cyan-100">Plan mensual</div>
+
+                    <BuyButton
+                      slug={course.slug}
+                      plan="monthly"
+                      source={`pricing-monthly:${course.slug}`}
+                      variant="ghost"
+                      label="📅 Suscríbete mensual"
+                    />
                   </div>
                 )}
               </div>
 
-              <div className="space-y-3">
-                <Link
-                  href="/inscripcion"
-                  className="w-full bg-white text-cyan-600 font-bold py-4 rounded-2xl hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  💳 Comenzar ahora
-                </Link>
-
-                <p className="text-center text-cyan-200 text-sm">
-                  {course.certificado ? "✅ Certificado" : ""}{" "}
-                  {course.accesoVitalicio ? "• ✅ Acceso vitalicio" : ""}
-                </p>
-              </div>
+              <p className="mt-6 text-center text-cyan-200 text-sm">
+                {course.certificado ? "✅ Certificado" : ""}{" "}
+                {course.accesoVitalicio ? "• ✅ Acceso vitalicio" : ""}
+              </p>
             </div>
           </motion.div>
         </div>

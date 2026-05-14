@@ -22,18 +22,56 @@ enum Nivel {
   TodosLosNiveles
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+}
+
+enum EnrollmentSource {
+  ONE_TIME      // pago único de un curso (Order)
+  SUBSCRIPTION  // viene de una suscripción al catálogo
+  MANUAL        // alta manual desde admin
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  EXPIRED
+  REFUNDED
+  CANCELED
+}
+
 model User {
   id         Int        @id @default(autoincrement())
   name       String
   email      String     @unique
-  password   String
+  // Opcional: usuarios creados durante el checkout de Stripe pueden no tener
+  // password todavía. Se setea al activar la cuenta vía email.
+  password   String?
   role       Role       @default(STUDENT)
+
+  // Stripe — un solo Customer por usuario
+  stripeCustomerId String? @unique
+
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
   enrollments         Enrollment[]
   coursesTaught       Course[]       @relation("InstructorCourses")
   testimonialsWritten Testimonial[]
+  orders              Order[]
+  subscriptions       Subscription[]
 }
 
 model Course {
@@ -57,7 +95,16 @@ model Course {
   // Precio (denormalizado: cada curso tiene exactamente un precio)
   precioMensual  Float?
   precioCompleto Float?
-  precioMoneda   String? @default("€")
+  precioMoneda   String? @default("EUR")
+
+  // Stripe — cada curso tiene dos prices:
+  //   - Monthly: subscription recurring mensual (Stripe mode='subscription')
+  //   - Yearly:  pago one-time, da acceso por 1 año (Stripe mode='payment')
+  // No guardamos productId porque, según el flujo actual, podría haber 2
+  // productos por curso (uno por modalidad) y la decisión real se toma
+  // a nivel de price, no de product.
+  stripePriceIdMonthly String? @unique
+  stripePriceIdYearly  String? @unique
 
   // Contenido (denormalizado)
   modulosCount   Int?
@@ -100,9 +147,12 @@ model Course {
   updatedAt   DateTime  @updatedAt
 
   // Relaciones
-  temario      CourseModule[]
-  enrollments  Enrollment[]
-  testimonials Testimonial[]
+  temario       CourseModule[]
+  enrollments   Enrollment[]
+  testimonials  Testimonial[]
+  orders        Order[]
+  leads         Lead[]
+  subscriptions Subscription[]
 
   @@index([categoria])
   @@index([destacado])
@@ -123,15 +173,32 @@ model CourseModule {
 }
 
 model Enrollment {
-  id         Int      @id @default(autoincrement())
+  id         Int              @id @default(autoincrement())
   userId     Int
   courseId   Int
-  enrolledAt DateTime @default(now())
+
+  source     EnrollmentSource @default(MANUAL)
+  status     EnrollmentStatus @default(ACTIVE)
+
+  // Procedencia opcional: una inscripción puede venir de un Order one-time
+  // o de una Subscription al catálogo (o ser manual desde admin → ambos null)
+  orderId        Int?
+  order          Order?        @relation(fields: [orderId], references: [id])
+  subscriptionId Int?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  enrolledAt DateTime  @default(now())
+  // null = acceso vitalicio. Si viene de suscripción, se actualiza con
+  // currentPeriodEnd en cada renovación.
+  expiresAt  DateTime?
 
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
 
   @@unique([userId, courseId])
+  @@index([status])
+  @@index([orderId])
+  @@index([subscriptionId])
 }
 
 model Testimonial {
@@ -145,4 +212,124 @@ model Testimonial {
 
   author User   @relation(fields: [authorId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
+}
+
+// =============================================================================
+// CRM + Pagos (Fase 2)
+// =============================================================================
+
+// Visitante que dejó email/teléfono pero aún no compró.
+// Cuando paga, no lo borramos: lo enlazamos al User creado.
+model Lead {
+  id        Int      @id @default(autoincrement())
+  email     String
+  name      String?
+  phone     String?
+  // Origen libre: 'landing', 'curso-detalle', 'newsletter', etc.
+  source    String?
+  // Si dejó email en una página de curso concreto
+  courseId  Int?
+  course    Course?  @relation(fields: [courseId], references: [id])
+
+  // UTM tracking
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+
+  // Notas internas (desde el admin)
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Una persona puede ser lead de varios cursos (un Lead distinto por curso),
+  // pero NO se duplica un mismo email para el mismo curso. Reintentos del
+  // checkout actualizan el Lead existente (vía upsert) en vez de crear filas.
+  @@unique([email, courseId])
+  @@index([email])
+  @@index([courseId])
+  @@index([createdAt])
+}
+
+// Pago único (one-time). Una Order genera 1 Enrollment del courseId comprado.
+model Order {
+  id Int @id @default(autoincrement())
+
+  // Stripe IDs
+  stripeSessionId       String  @unique
+  stripePaymentIntentId String? @unique
+
+  // Comprador
+  userId        Int?
+  user          User?  @relation(fields: [userId], references: [id])
+  customerEmail String  // siempre lo capturamos, aunque User aún no exista
+
+  // Producto comprado
+  courseId Int?
+  course   Course? @relation(fields: [courseId], references: [id])
+
+  // Importes
+  amount   Int    // en centavos (Stripe)
+  currency String @default("eur")
+
+  status   OrderStatus @default(PENDING)
+
+  paidAt     DateTime?
+  refundedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollments Enrollment[]
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([status])
+  @@index([customerEmail])
+}
+
+// Suscripción mensual recurring a UN curso concreto. Genera 1 Enrollment con
+// source=SUBSCRIPTION cuyo expiresAt se mantiene = currentPeriodEnd mientras
+// la suscripción esté activa. Cuando se cancela/expira, el Enrollment pasa
+// a EXPIRED y el usuario pierde acceso a ese curso.
+model Subscription {
+  id Int @id @default(autoincrement())
+
+  // Stripe IDs
+  stripeSubscriptionId String @unique
+  stripePriceId        String
+  stripeCustomerId     String
+
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  status SubscriptionStatus @default(INCOMPLETE)
+
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAt           DateTime?
+  canceledAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  enrollments Enrollment[]
+
+  @@index([userId])
+  @@index([courseId])
+  @@index([status])
+}
+
+// Idempotencia de webhooks: cada event.id de Stripe se guarda al procesarlo.
+// Si llega un duplicado, se ignora.
+model StripeEvent {
+  id            Int      @id @default(autoincrement())
+  stripeEventId String   @unique
+  type          String
+  payload       Json
+  processedAt   DateTime @default(now())
+
+  @@index([type])
 }
