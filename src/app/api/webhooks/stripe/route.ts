@@ -366,12 +366,17 @@ async function processSubscription(
   // configurada), `current_period_start` y `current_period_end` se movieron
   // del Subscription al SubscriptionItem (para soportar items con ciclos
   // distintos). Leemos del item con fallback al objeto sub por compat.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // Los tipos del SDK 17.x con apiVersion 'acacia' aún ponen los campos en
+  // Subscription, así que casteamos a any para acceder de forma robusta sin
+  // que cambie el comportamiento en runtime.
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const subAny = sub as any;
+  const itemAny = item as any;
   const periodStartUnix =
-    item?.current_period_start ?? subAny.current_period_start;
+    itemAny?.current_period_start ?? subAny.current_period_start;
   const periodEndUnix =
-    item?.current_period_end ?? subAny.current_period_end;
+    itemAny?.current_period_end ?? subAny.current_period_end;
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   if (!periodStartUnix || !periodEndUnix) {
     console.error(
