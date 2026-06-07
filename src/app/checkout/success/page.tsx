@@ -9,7 +9,7 @@ import { CheckCircle2, Mail, ArrowRight } from "lucide-react";
 import { retrieveCheckoutSession } from "@/server/checkout";
 
 export const metadata: Metadata = {
-  title: "¡Pago confirmado! · Xhiggz",
+  title: "¡Pago confirmado! · xhiggs",
   description: "Gracias por tu compra. Te enviamos los próximos pasos por email.",
 };
 
@@ -52,7 +52,7 @@ export default async function CheckoutSuccessPage({ searchParams }: Props) {
 
           <p className="mt-3 text-lg text-gray-600">
             {mode === "subscription"
-              ? "Tu suscripción al catálogo Xhiggz está activa."
+              ? "Tu suscripción al catálogo xhiggs está activa."
               : "Tu inscripción quedó registrada."}
           </p>
 

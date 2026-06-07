@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     // next/image servirá AVIF/WebP automáticamente cuando el navegador lo soporte.
     formats: ["image/avif", "image/webp"],
     // Cuando migres modelos/imágenes a un CDN, añade aquí su dominio:
-    // remotePatterns: [{ protocol: "https", hostname: "cdn.xhiggz.com" }]
+    // remotePatterns: [{ protocol: "https", hostname: "cdn.xhiggs.com" }]
     remotePatterns: [],
   },
 
@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       "lucide-react",
       "framer-motion",
     ],
+  },
+
+  turbopack: {
+    // Fija la raíz del workspace para evitar que Turbopack tome el
+    // package-lock.json de un directorio padre como raíz del monorepo.
+    root: __dirname,
   },
 };
 

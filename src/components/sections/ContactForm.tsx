@@ -88,7 +88,7 @@ export default function ContactForm() {
           </motion.div>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">¡Mensaje Enviado!</h2>
           <p className="text-xl text-gray-700 mb-8">
-            Gracias por tu interés en Xhiggz. Te contactaremos en menos de 24 horas.
+            Gracias por tu interés en xhiggs. Te contactaremos en menos de 24 horas.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -144,7 +144,7 @@ export default function ContactForm() {
             {/* Información lateral */}
             <motion.div variants={itemVariants} className="space-y-8">
               <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Por qué unirte a Xhiggz?</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">¿Por qué unirte a xhiggs?</h3>
                 
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">

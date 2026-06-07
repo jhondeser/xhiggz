@@ -16,7 +16,7 @@ interface HeroProps {
 
 const NosotrosHero: React.FC<HeroProps> = ({
   title = 'Conoce Nuestra Historia',
-  subtitle = 'Descubre la pasión, los valores y el equipo detrás de Xhiggz',
+  subtitle = 'Descubre la pasión, los valores y el equipo detrás de xhiggs',
   ctaText = 'Explorar Nuestra Misión',
   ctaLink = '#quienes-somos',
   secondaryCtaText = 'Ver Cursos',

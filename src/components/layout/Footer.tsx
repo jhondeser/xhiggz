@@ -4,9 +4,9 @@ export default function Footer() {
   return (
     <footer className="bg-[#0b0e1b] text-white py-10 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-        {/* Columna 1: Sobre Xhiggz */}
+        {/* Columna 1: Sobre xhiggs */}
         <div>
-          <h4 className="text-lg font-bold mb-2">Xhiggz</h4>
+          <h4 className="text-lg font-bold mb-2">xhiggs</h4>
           <p className="text-gray-400">
             Educación, tecnología y creatividad desde el corazón del universo.
           </p>
@@ -34,7 +34,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center text-xs text-gray-500 mt-8">
-        © {new Date().getFullYear()} Xhiggz. Todos los derechos reservados.
+        © {new Date().getFullYear()} xhiggs. Todos los derechos reservados.
       </div>
     </footer>
   );

@@ -41,7 +41,7 @@ function LoginForm() {
       onSubmit={handleSubmit}
       className="w-full max-w-sm bg-slate-900 rounded-2xl p-8 border border-slate-800"
     >
-      <h1 className="text-2xl font-semibold mb-2">Admin Xhiggz</h1>
+      <h1 className="text-2xl font-semibold mb-2">Admin xhiggs</h1>
       <p className="text-slate-400 text-sm mb-6">
         Acceso restringido. Introduce el password de administrador.
       </p>

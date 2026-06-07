@@ -21,8 +21,11 @@ export default function SiteChrome({
 }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith("/admin") ?? false;
+  const isAuth = pathname === "/login" || pathname === "/registro";
+  const isAula = pathname?.includes("/aula") ?? false;
+  const skipChrome = isAdmin || isAuth || isAula;
 
-  if (isAdmin) {
+  if (skipChrome) {
     return <>{children}</>;
   }
 

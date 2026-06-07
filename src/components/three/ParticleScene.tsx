@@ -5,7 +5,7 @@ import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
 import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
-function XhiggzModel() {
+function XhiggsModel() {
   const modelRef = useRef<THREE.Group>(null!);
   const { scene } = useGLTF("/models/xhiggz-particle.glb", true);
 
@@ -45,7 +45,7 @@ export default function ParticleScene() {
 
         <Environment preset="city" />
 
-        <XhiggzModel />
+        <XhiggsModel />
 
         <OrbitControls enableZoom={false} />
       </Suspense>

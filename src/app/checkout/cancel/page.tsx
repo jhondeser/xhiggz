@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import { XCircle, ArrowLeft } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Pago cancelado · Xhiggz",
+  title: "Pago cancelado · xhiggs",
   description: "No se realizó ningún cargo. Puedes volver a intentarlo cuando quieras.",
 };
 

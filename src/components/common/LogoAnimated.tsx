@@ -89,7 +89,7 @@ export default function LogoAnimated() {
         fontFamily="Orbitron, sans-serif"
         fill="#ffffff"
       >
-        HIGGZ
+        HIGGS
       </text>
     </svg>
   );

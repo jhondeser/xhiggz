@@ -1069,7 +1069,7 @@ export const courses: Course[] = [
     slug: "programacion-web-basico-html-css-js",
     title: "Programación Web Básico: Crea tu Primera Web",
     description:
-      "Aprende los fundamentos del desarrollo web desde cero utilizando HTML, CSS y JavaScript. Construirás tu primera landing page responsive dentro del universo Xhiggz, entendiendo cómo se estructuran, diseñan y animan las páginas web modernas.",
+      "Aprende los fundamentos del desarrollo web desde cero utilizando HTML, CSS y JavaScript. Construirás tu primera landing page responsive dentro del universo xhiggs, entendiendo cómo se estructuran, diseñan y animan las páginas web modernas.",
     emoji: "🌐",
     modelKey: "web-1",
     categoria: "Tecnología y Desarrollo Web",
@@ -1246,7 +1246,7 @@ export const courses: Course[] = [
     slug: "programacion-web-intermedio-dom-tailwind-apis",
     title: "Programación Web Intermedio: Interfaces Vivas",
     description:
-      "Aprende a crear interfaces web interactivas utilizando JavaScript, DOM, Tailwind CSS, conceptos de UI/UX y consumo de APIs. Construirás una aplicación dinámica conectada a datos reales, como una Pokédex, un catálogo de personajes o un explorador de mundos Xhiggz.",
+      "Aprende a crear interfaces web interactivas utilizando JavaScript, DOM, Tailwind CSS, conceptos de UI/UX y consumo de APIs. Construirás una aplicación dinámica conectada a datos reales, como una Pokédex, un catálogo de personajes o un explorador de mundos xhiggs.",
     emoji: "⚡",
     modelKey: "web-2",
     categoria: "Tecnología y Desarrollo Web",

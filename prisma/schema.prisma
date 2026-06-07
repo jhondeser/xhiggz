@@ -322,6 +322,21 @@ model Subscription {
   @@index([status])
 }
 
+// Magic link tokens para login passwordless. Se guarda el HASH del token, no
+// el token en sí — así un dump de BD no permite usar los links pendientes.
+// Cada token es de un solo uso (se borra al consumirse) y expira en 15 min.
+model VerificationToken {
+  id         Int      @id @default(autoincrement())
+  tokenHash  String   @unique // SHA-256 hex del token raw
+  email      String
+  redirectTo String?  // URL relativa a la que ir después de verificar
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
 // Idempotencia de webhooks: cada event.id de Stripe se guarda al procesarlo.
 // Si llega un duplicado, se ignora.
 model StripeEvent {

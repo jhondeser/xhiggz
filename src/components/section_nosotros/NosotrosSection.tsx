@@ -96,7 +96,7 @@ export const QuienesSomosSection: React.FC = () => (
           
           <div className="space-y-4 text-lg text-gray-700 leading-relaxed">
             <p>
-              <strong className="text-blue-600">Xhiggz</strong> nació de una convicción profunda: 
+              <strong className="text-blue-600">xhiggs</strong> nació de una convicción profunda: 
               el verdadero aprendizaje surge cuando <strong className="text-cyan-600">creas, experimentas y transformas</strong> 
               tus ideas en realidad.
             </p>
@@ -245,7 +245,7 @@ export const VisionSection: React.FC = () => (
           
           <div className="space-y-4 text-lg text-gray-700 leading-relaxed">
             <p>
-              Visualizamos a <strong className="text-purple-600">Xhiggz</strong> como el epicentro de 
+              Visualizamos a <strong className="text-purple-600">xhiggs</strong> como el epicentro de 
               la <strong>educación tecnológica en español</strong>, con una comunidad de más de 
               50,000 creadores activos alrededor del mundo.
             </p>

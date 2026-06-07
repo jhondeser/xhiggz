@@ -65,7 +65,7 @@ export default function Navbar() {
               Iniciar sesión
             </Link>
             <Link
-              href="/registro"
+              href="/login"
               className="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-full transition"
             >
               Registrarse
@@ -158,7 +158,7 @@ export default function Navbar() {
             Iniciar sesión
           </Link>
           <Link
-            href="/registro"
+            href="/login"
             className="px-4 py-2 text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium shadow-lg hover:shadow-cyan-500/25"
           >
             Registrarse
@@ -219,7 +219,7 @@ export default function Navbar() {
               Iniciar sesión
             </Link>
             <Link
-              href="/registro"
+              href="/login"
               className="block px-4 py-3 text-center text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium"
               onClick={() => setIsOpen(false)}
             >

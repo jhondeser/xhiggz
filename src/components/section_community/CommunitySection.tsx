@@ -63,7 +63,7 @@ export default function CommunitySection() {
         className="relative flex flex-col items-center text-center px-4 sm:px-6 py-20 bg-gradient-to-br from-black via-indigo-900 to-blue-950 text-white"
       >
         <h2 className="text-4xl sm:text-5xl font-extrabold mb-4">
-          Únete a la comunidad Xhiggz
+          Únete a la comunidad xhiggs
         </h2>
         <p className="max-w-2xl text-lg sm:text-xl mb-8 text-indigo-200">
           Compartimos conocimientos, resolvemos dudas y creamos proyectos juntos. Forma

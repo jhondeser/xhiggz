@@ -137,7 +137,7 @@ export default function Testimonials() {
             className="text-xl text-gray-600 max-w-2xl mx-auto"
             variants={item}
           >
-            Descubre las experiencias reales de quienes ya transformaron su futuro con Xhiggz
+            Descubre las experiencias reales de quienes ya transformaron su futuro con xhiggs
           </motion.p>
         </motion.div>
 

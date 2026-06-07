@@ -543,7 +543,7 @@ async function notifyN8n(event: Stripe.Event) {
 
   const headers: Record<string, string> = { "content-type": "application/json" };
   if (process.env.N8N_WEBHOOK_SECRET) {
-    headers["x-xhiggz-secret"] = process.env.N8N_WEBHOOK_SECRET;
+    headers["x-xhiggs-secret"] = process.env.N8N_WEBHOOK_SECRET;
   }
 
   await fetch(url, {

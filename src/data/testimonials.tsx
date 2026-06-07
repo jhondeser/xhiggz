@@ -6,7 +6,7 @@ export const testimonials: Testimonial[] = [
     name: "Sofía G.",
     course: "Arte digital con Minecraft",
     message:
-      "Aprendí a diseñar mundos increíbles mientras me divertía. ¡Xhiggz es otro nivel!",
+      "Aprendí a diseñar mundos increíbles mientras me divertía. ¡xhiggs es otro nivel!",
     avatar: "/avatars/avatar1.png",
   },
   {

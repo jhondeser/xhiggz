@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import SiteChrome from "@/components/layout/SiteChrome";
 
 export const metadata = {
-  title: "Xhiggz",
+  title: "xhiggs",
   description: "Educación virtual basada en el poder de la creación",
 };
 

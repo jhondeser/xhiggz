@@ -101,7 +101,7 @@ export default function AboutSection() {
           </h2>
           
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            En <span className="font-bold text-blue-600">Xhiggz</span> no solo enseñamos tecnología, 
+            En <span className="font-bold text-blue-600">xhiggs</span> no solo enseñamos tecnología, 
             cultivamos <span className="text-purple-600">creadores del futuro</span> que transforman 
             ideas en realidades digitales.
           </p>

@@ -4,7 +4,7 @@
 // Course.stripePriceIdYearly automáticamente, evitando copiar 40 IDs a mano.
 //
 // Estrategia de matching (en este orden):
-//   1) product.metadata.xhiggz_slug === course.slug   ← preferido
+//   1) product.metadata.xhiggs_slug === course.slug   ← preferido
 //   2) product.name normalizado === course.title normalizado
 //   3) product.name normalizado contiene course.slug
 //
@@ -62,7 +62,7 @@ async function loadStripeProducts(): Promise<ProductPrices[]> {
     const entry: ProductPrices = {
       productId: product.id,
       productName: product.name,
-      metadataSlug: product.metadata?.xhiggz_slug,
+      metadataSlug: product.metadata?.xhiggs_slug,
     };
 
     for (const price of prices.data) {
@@ -124,7 +124,7 @@ async function main() {
 
     let match: MatchResult | undefined;
 
-    // 1) metadata.xhiggz_slug
+    // 1) metadata.xhiggs_slug
     const byMeta = products.find(
       (p) => !usedProductIds.has(p.productId) && p.metadataSlug && normalize(p.metadataSlug) === courseSlugN,
     );

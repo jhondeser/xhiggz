@@ -6,7 +6,7 @@ export default function Contactanos() {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-semibold text-center mb-8">Contáctanos</h2>
         <p className="text-center text-gray-600 mb-12">
-          En Xhiggz estamos encantados de resolver tus dudas o escuchar tus sugerencias. ¡Escríbenos y te responderemos lo antes posible!
+          En xhiggs estamos encantados de resolver tus dudas o escuchar tus sugerencias. ¡Escríbenos y te responderemos lo antes posible!
         </p>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -25,7 +25,7 @@ export default function Contactanos() {
               <span className="text-2xl mr-4">📧</span>
               <div>
                 <h3 className="text-lg font-medium mb-1">Email</h3>
-                <p className="text-gray-700">hola@xhiggz.com</p>
+                <p className="text-gray-700">hola@xhiggs.com</p>
                 <p className="text-gray-500 text-sm">Te respondemos en <strong>24h</strong></p>
               </div>
             </div>
