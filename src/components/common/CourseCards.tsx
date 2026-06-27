@@ -260,20 +260,19 @@ export default function CourseCard({
             {/* POSTER: imagen del curso visible mientras el modelo no está listo.
                 Da feedback visual instantáneo al flippear, evitando el "negro"
                 durante los milisegundos de descarga + parseo del .glb. */}
+            {/* POSTER: siempre visible como fondo, se oscurece al cargar el modelo */}
             <div
               className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${
-                modelReady ? "opacity-0" : "opacity-100"
+                modelReady ? "opacity-40" : "opacity-100"
               }`}
               style={{ backgroundImage: `url(${course.img})` }}
               aria-hidden="true"
             />
 
-            {/* Tinte sobre el poster para integrarlo con la estética
-                oscura de la tarjeta y suavizar el contraste con el modelo
-                cuando aparece encima. */}
+            {/* Tinte oscuro sobre el poster — se intensifica cuando el modelo está listo */}
             <div
               className={`absolute inset-0 transition-opacity duration-500 ${
-                modelReady ? "opacity-0" : "opacity-100"
+                modelReady ? "opacity-80" : "opacity-100"
               }`}
               style={{
                 background:

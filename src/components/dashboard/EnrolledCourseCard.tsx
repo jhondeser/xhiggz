@@ -208,13 +208,14 @@ export default function EnrolledCourseCard({
 
           {/* Modelo 3D */}
           <div className="relative z-10 w-full h-[280px] mb-4 flex justify-center items-center bg-gradient-to-br from-gray-800 to-slate-900 rounded-xl border border-cyan-500/20 overflow-hidden">
+            {/* POSTER: siempre visible como fondo, se oscurece al cargar el modelo */}
             <div
-              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${modelReady ? "opacity-0" : "opacity-100"}`}
+              className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 ${modelReady ? "opacity-40" : "opacity-100"}`}
               style={{ backgroundImage: `url(${img})` }}
               aria-hidden="true"
             />
             <div
-              className={`absolute inset-0 transition-opacity duration-500 ${modelReady ? "opacity-0" : "opacity-100"}`}
+              className={`absolute inset-0 transition-opacity duration-500 ${modelReady ? "opacity-80" : "opacity-100"}`}
               style={{ background: "radial-gradient(circle at center, rgba(2,6,23,0.25), rgba(2,6,23,0.55) 70%, rgba(2,6,23,0.75) 100%)" }}
               aria-hidden="true"
             />
