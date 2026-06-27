@@ -65,9 +65,6 @@ export default async function AulaPage({ params }: PageProps) {
       <div className="max-w-5xl mx-auto px-6 pt-24 pb-10">
         <header className="mb-10 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="text-cyan-400 text-sm font-medium mb-1">
-              {course.emoji ?? "🎓"} Aula
-            </div>
             <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               {course.title}
             </h1>

@@ -10,6 +10,7 @@ import { type ReactNode } from "react";
  * Las rutas /admin/* tienen su propio layout (en src/app/admin/(panel)/layout.tsx)
  * y NO deben heredar Navbar/Footer del root.
  */
+
 export default function SiteChrome({
   navbar,
   footer,
