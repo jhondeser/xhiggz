@@ -1,49 +1,49 @@
 // src/middleware.ts
-//
-// Protege /admin/* y /api/admin/* salvo las rutas públicas de login.
-// Corre en Edge runtime, por eso admin-auth.ts usa Web Crypto.
+// Admin routes: sesion custom HMAC (admin-auth.ts)
+// Student routes: NextAuth JWT (getToken de next-auth/jwt)
 
 import { NextResponse, type NextRequest } from "next/server";
-import { SESSION_COOKIE, verifySessionToken } from "@/lib/admin-auth";
+import { getToken } from "next-auth/jwt";
+import {
+  SESSION_COOKIE as ADMIN_COOKIE,
+  verifySessionToken as verifyAdmin,
+} from "@/lib/admin-auth";
 
-const PUBLIC_PATHS = new Set<string>([
-  "/admin/login",
-  "/api/admin/login",
-]);
+const ADMIN_PUBLIC = new Set(["/admin/login", "/api/admin/login"]);
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (PUBLIC_PATHS.has(pathname)) {
-    return NextResponse.next();
+  // Admin
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+    if (ADMIN_PUBLIC.has(pathname)) return NextResponse.next();
+
+    const secret = process.env.ADMIN_SESSION_SECRET;
+    if (!secret) return NextResponse.json({ error: "ADMIN_SESSION_SECRET no definido" }, { status: 500 });
+
+    const token = req.cookies.get(ADMIN_COOKIE)?.value;
+    if (await verifyAdmin(token, secret)) return NextResponse.next();
+
+    if (pathname.startsWith("/api/")) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+
+    const url = new URL("/admin/login", req.url);
+    if (pathname !== "/admin") url.searchParams.set("from", pathname);
+    return NextResponse.redirect(url);
   }
 
-  const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!secret) {
-    return NextResponse.json(
-      { error: "ADMIN_SESSION_SECRET no está definido en el servidor" },
-      { status: 500 },
-    );
+  // Student area
+  if (pathname.startsWith("/mis-cursos") || pathname.startsWith("/mi-cuenta")) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    if (token) return NextResponse.next();
+
+    const url = new URL("/login", req.url);
+    url.searchParams.set("from", pathname);
+    return NextResponse.redirect(url);
   }
 
-  const token = req.cookies.get(SESSION_COOKIE)?.value;
-  const valid = await verifySessionToken(token, secret);
-
-  if (valid) return NextResponse.next();
-
-  // API → 401 limpio.
-  if (pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-
-  // Página → redirect a /admin/login conservando destino.
-  const loginUrl = new URL("/admin/login", req.url);
-  if (pathname !== "/admin") {
-    loginUrl.searchParams.set("from", pathname);
-  }
-  return NextResponse.redirect(loginUrl);
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/mis-cursos/:path*", "/mi-cuenta/:path*"],
 };

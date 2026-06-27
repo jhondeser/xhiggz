@@ -23,7 +23,12 @@ export default function SiteChrome({
   const isAdmin = pathname?.startsWith("/admin") ?? false;
   const isAuth = pathname === "/login" || pathname === "/registro";
   const isAula = pathname?.includes("/aula") ?? false;
-  const skipChrome = isAdmin || isAuth || isAula;
+  // El área del alumno (dashboard) tiene su propio layout con nav propio
+  const isDashboard =
+    pathname?.startsWith("/mis-cursos") ||
+    pathname?.startsWith("/mi-cuenta") ||
+    false;
+  const skipChrome = isAdmin || isAuth || isAula || isDashboard;
 
   if (skipChrome) {
     return <>{children}</>;

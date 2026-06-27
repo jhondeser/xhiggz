@@ -9,11 +9,16 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Evitar hidratación hasta que el componente esté montado en el cliente
   useEffect(() => {
     setIsMounted(true);
-    
+
+    // Detectar sesión de alumno via cookie (solo para UI).
+    // La seguridad real está en el middleware y los Server Components.
+    setIsLoggedIn(document.cookie.includes("next-auth.session-token="));
+
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);
@@ -23,7 +28,7 @@ export default function Navbar() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -145,24 +150,35 @@ export default function Navbar() {
         </nav>
         
         <div className="hidden md:flex gap-4 items-center">
-          <Link
-            href="/login"
-            className={`
-              px-4 py-2 text-sm rounded-full transition-all duration-200 font-medium
-              ${isScrolled 
-                ? "border border-white hover:bg-white hover:text-black" 
-                : "border border-white/50 hover:bg-white hover:text-black"
-              }
-            `}
-          >
-            Iniciar sesión
-          </Link>
-          <Link
-            href="/login"
-            className="px-4 py-2 text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium shadow-lg hover:shadow-cyan-500/25"
-          >
-            Registrarse
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              href="/mis-cursos"
+              className="px-4 py-2 text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium shadow-lg hover:shadow-cyan-500/25"
+            >
+              Mis cursos
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className={`
+                  px-4 py-2 text-sm rounded-full transition-all duration-200 font-medium
+                  ${isScrolled
+                    ? "border border-white hover:bg-white hover:text-black"
+                    : "border border-white/50 hover:bg-white hover:text-black"
+                  }
+                `}
+              >
+                Iniciar sesión
+              </Link>
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium shadow-lg hover:shadow-cyan-500/25"
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -205,26 +221,32 @@ export default function Navbar() {
           </Link>
 
           <div className="pt-4 border-t border-white/20 flex flex-col gap-3">
-            <Link
-              href="/login"
-              className={`
-                block px-4 py-3 text-center text-sm rounded-full transition-all duration-200 font-medium
-                ${isScrolled 
-                  ? "border border-white hover:bg-white hover:text-black" 
-                  : "border border-white hover:bg-white hover:text-black"
-                }
-              `}
-              onClick={() => setIsOpen(false)}
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              href="/login"
-              className="block px-4 py-3 text-center text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium"
-              onClick={() => setIsOpen(false)}
-            >
-              Registrarse
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                href="/mis-cursos"
+                className="block px-4 py-3 text-center text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium"
+                onClick={() => setIsOpen(false)}
+              >
+                Mis cursos
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="block px-4 py-3 text-center text-sm rounded-full transition-all duration-200 font-medium border border-white hover:bg-white hover:text-black"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Iniciar sesión
+                </Link>
+                <Link
+                  href="/login"
+                  className="block px-4 py-3 text-center text-sm bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-full transition-all duration-200 font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Registrarse
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

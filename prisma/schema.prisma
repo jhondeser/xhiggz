@@ -53,13 +53,14 @@ enum EnrollmentStatus {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  name       String
-  email      String     @unique
-  // Opcional: usuarios creados durante el checkout de Stripe pueden no tener
-  // password todavía. Se setea al activar la cuenta vía email.
-  password   String?
-  role       Role       @default(STUDENT)
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  // Hash bcrypt de la contraseña. Null si el usuario solo usa Google OAuth.
+  password      String?
+  image         String?
+  role          Role      @default(STUDENT)
 
   // Stripe — un solo Customer por usuario
   stripeCustomerId String? @unique

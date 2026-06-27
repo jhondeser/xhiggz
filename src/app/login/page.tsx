@@ -1,109 +1,122 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
+import { signIn } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
-
-function errorMessageFromParam(error: string | null): string | null {
-  if (error === "invalid-or-expired")
-    return "El enlace expiró o ya se había usado. Pide uno nuevo.";
-  if (error === "missing-token") return "El enlace no es válido.";
-  return null;
-}
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const from = searchParams.get("from");
-  const initialError = errorMessageFromParam(searchParams.get("error"));
+  const router = useRouter();
+  const from = searchParams.get("from") ?? "/mis-cursos";
+  const urlError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<"form" | "sent">("form");
-  const [errorMsg, setErrorMsg] = useState<string | null>(initialError);
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [error, setError] = useState<string | null>(
+    urlError === "CredentialsSignin" ? "Email o contraseña incorrectos." : null
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg(null);
-    try {
-      const res = await fetch("/api/auth/request-magic-link", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, from }),
-      });
-      if (res.ok) {
-        setState("sent");
-      } else {
-        const data = await res.json().catch(() => ({}));
-        setErrorMsg(data.error ?? "No se pudo enviar el enlace");
-      }
-    } catch {
-      setErrorMsg("Error de red");
-    } finally {
-      setLoading(false);
+    setError(null);
+
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    setLoading(false);
+
+    if (res?.error) {
+      setError("Email o contraseña incorrectos.");
+      return;
     }
+
+    router.push(from);
+    router.refresh();
   }
 
-  if (state === "sent") {
-    return (
-      <div className="w-full max-w-sm bg-slate-900 rounded-2xl p-8 border border-slate-800 text-slate-100">
-        <div className="text-emerald-400 text-3xl mb-3">✉</div>
-        <h1 className="text-2xl font-semibold mb-2">Revisa tu email</h1>
-        <p className="text-slate-400 text-sm leading-relaxed">
-          Te hemos enviado un enlace a{" "}
-          <span className="text-slate-200 font-medium">{email}</span>. Caduca en
-          15 minutos. Si no lo ves en unos segundos, revisa la carpeta de spam.
-        </p>
-        <button
-          onClick={() => {
-            setState("form");
-            setEmail("");
-            setErrorMsg(null);
-          }}
-          className="mt-6 text-sm text-emerald-400 hover:text-emerald-300"
-        >
-          ← Usar otro email
-        </button>
-      </div>
-    );
+  async function handleGoogle() {
+    setLoadingGoogle(true);
+    await signIn("google", { callbackUrl: from });
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full max-w-sm bg-slate-900 rounded-2xl p-8 border border-slate-800 text-slate-100"
-    >
-      <h1 className="text-2xl font-semibold mb-2">Entrar a xhiggs</h1>
+    <div className="w-full max-w-sm bg-slate-900 rounded-2xl p-8 border border-slate-800 text-slate-100">
+      <h1 className="text-2xl font-semibold mb-1">Entrar a Xhiggz</h1>
       <p className="text-slate-400 text-sm mb-6">
-        Te enviaremos un enlace mágico al email. Sin passwords ni formularios.
+        ¿No tienes cuenta?{" "}
+        <Link href="/registro" className="text-emerald-400 hover:text-emerald-300">
+          Regístrate gratis
+        </Link>
       </p>
 
-      <label className="block mb-4">
-        <span className="block text-sm text-slate-300 mb-2">Email</span>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoFocus
-          required
-          placeholder="tu@email.com"
-          className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
-        />
-      </label>
-
-      {errorMsg && (
-        <div className="mb-4 text-red-400 text-sm bg-red-950/40 border border-red-900 rounded-lg px-3 py-2">
-          {errorMsg}
-        </div>
-      )}
-
+      {/* Google */}
       <button
-        type="submit"
-        disabled={loading || !email}
-        className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium rounded-lg px-4 py-2 transition"
+        onClick={handleGoogle}
+        disabled={loadingGoogle}
+        className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-800 font-medium rounded-lg px-4 py-2.5 mb-5 transition disabled:opacity-50"
       >
-        {loading ? "Enviando…" : "Enviarme enlace"}
+        <svg className="w-5 h-5" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        {loadingGoogle ? "Redirigiendo…" : "Continuar con Google"}
       </button>
+
+      <div className="flex items-center gap-3 mb-5">
+        <div className="flex-1 h-px bg-slate-800" />
+        <span className="text-slate-500 text-xs">o con tu email</span>
+        <div className="flex-1 h-px bg-slate-800" />
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <label className="block">
+          <span className="block text-sm text-slate-300 mb-1.5">Email</span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoFocus
+            placeholder="tu@email.com"
+            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
+          />
+        </label>
+
+        <label className="block">
+          <span className="block text-sm text-slate-300 mb-1.5">Contraseña</span>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+            className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-500"
+          />
+        </label>
+
+        {error && (
+          <div className="text-red-400 text-sm bg-red-950/40 border border-red-900 rounded-lg px-3 py-2">
+            {error}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-medium rounded-lg px-4 py-2.5 transition"
+        >
+          {loading ? "Entrando…" : "Entrar"}
+        </button>
+      </form>
 
       <p className="text-slate-500 text-xs mt-6 text-center">
         ¿Aún no compraste un curso?{" "}
@@ -111,7 +124,7 @@ function LoginForm() {
           Explora el catálogo
         </Link>
       </p>
-    </form>
+    </div>
   );
 }
 
