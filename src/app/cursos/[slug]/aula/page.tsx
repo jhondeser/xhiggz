@@ -84,7 +84,7 @@ export default async function AulaPage({ params }: PageProps) {
             <div className="mt-1">
               Modalidad:{" "}
               {enrollment.source === "ONE_TIME"
-                ? "Anual"
+                ? "Completo"
                 : enrollment.source === "SUBSCRIPTION"
                   ? "Mensual"
                   : "Manual"}

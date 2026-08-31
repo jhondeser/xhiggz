@@ -64,7 +64,7 @@ export default async function AdminDashboard() {
     {
       label: "Orders pagadas",
       value: m.ordersPaid.toLocaleString("es-ES"),
-      hint: "One-time / planes anuales",
+      hint: "One-time / curso completo",
     },
     {
       label: "Subscripciones activas",

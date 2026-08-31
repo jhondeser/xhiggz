@@ -306,7 +306,7 @@ export default function CourseDetailContent({ course }: Props) {
                         {course.precio.completo}
                       </div>
                       <div className="text-cyan-100 text-sm">
-                        Pago único · Acceso 1 año
+                        Pago único · Acceso completo al curso
                       </div>
                     </div>
 
@@ -315,7 +315,7 @@ export default function CourseDetailContent({ course }: Props) {
                       plan="yearly"
                       source={`pricing-yearly:${course.slug}`}
                       variant="white"
-                      label="🎓 Acceso 1 año"
+                      label="🎓 Curso completo"
                     />
                   </div>
                 )}

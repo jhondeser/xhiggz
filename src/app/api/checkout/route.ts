@@ -20,6 +20,8 @@ interface CheckoutRequestBody {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  // ID del CourseGroup elegido por el alumno (paso 2 del dialog)
+  groupId?: number;
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,7 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const { slug, plan, email, name } = body;
+  const { slug, plan, email, name, groupId } = body;
 
   if (!slug) {
     return NextResponse.json({ error: "slug requerido" }, { status: 400 });
@@ -106,6 +108,7 @@ export async function POST(req: Request) {
       plan,
       customerEmail: email,
       customerName: name,
+      groupId: typeof groupId === 'number' ? groupId : undefined,
     });
 
     return NextResponse.json({ url: result.url });

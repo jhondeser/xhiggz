@@ -35,6 +35,15 @@ export default async function MisCursosPage() {
           horas: true,
         },
       },
+      group: {
+        select: {
+          nombre: true,
+          dia: true,
+          franja: true,
+          horaInicio: true,
+          horaFin: true,
+        },
+      },
     },
     orderBy: { enrolledAt: "desc" },
   });
@@ -62,7 +71,7 @@ export default async function MisCursosPage() {
         </div>
       ) : (
         <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-          {enrollments.map(({ course, expiresAt, source }) => (
+          {enrollments.map(({ course, expiresAt, source, group }) => (
             <EnrolledCourseCard
               key={course.slug}
               slug={course.slug}
@@ -78,6 +87,7 @@ export default async function MisCursosPage() {
               horas={course.horas}
               source={source}
               expiresAt={expiresAt}
+              group={group ?? undefined}
             />
           ))}
         </div>

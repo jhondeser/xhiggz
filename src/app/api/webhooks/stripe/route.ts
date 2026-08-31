@@ -8,7 +8,7 @@
 // 4. Fan-out opcional a n8n vía N8N_WEBHOOK_URL.
 //
 // Modelo de pagos: cada curso tiene 2 prices en Stripe.
-//   - plan='yearly'  → checkout mode='payment'      → Order one-time, Enrollment 365 días
+//   - plan='yearly'  → checkout mode='payment'      → Order one-time, Enrollment vitalicio (curso completo)
 //   - plan='monthly' → checkout mode='subscription' → Subscription, Enrollment renovado
 //                                                     mientras la sub esté activa
 //
@@ -19,7 +19,6 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { prisma } from "@/lib/prisma";
-import { YEARLY_ACCESS_DAYS } from "@/lib/stripe-config";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -111,11 +110,15 @@ export async function POST(req: Request) {
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const plan = session.metadata?.plan;
   const courseIdRaw = session.metadata?.courseId;
+  const groupIdRaw = session.metadata?.groupId;
   const email = session.customer_details?.email ?? session.customer_email;
+
+  // groupId es opcional: presente si el alumno eligió franja en el checkout
+  const groupId = groupIdRaw ? Number.parseInt(groupIdRaw, 10) : null;
 
   console.log(
     `[stripe-webhook] handleCheckoutCompleted session=${session.id} ` +
-      `plan=${plan} courseId=${courseIdRaw} email=${email} ` +
+      `plan=${plan} courseId=${courseIdRaw} groupId=${groupIdRaw ?? 'none'} email=${email} ` +
       `payment_status=${session.payment_status} mode=${session.mode}`,
   );
 
@@ -157,7 +160,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   console.log(`[stripe-webhook] User upserted id=${user.id} email=${email}`);
 
   if (plan === "yearly") {
-    await processYearlyOrder(session, user.id, email, courseId);
+    await processYearlyOrder(session, user.id, email, courseId, groupId);
     console.log(`[stripe-webhook] processYearlyOrder completado para ${email}`);
   } else if (plan === "monthly") {
     // Stripe envía customer.subscription.created ANTES que checkout.session.completed.
@@ -177,7 +180,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     }
 
     const sub = await stripe.subscriptions.retrieve(subscriptionId);
-    await processSubscription(sub, user.id, courseId);
+    await processSubscription(sub, user.id, courseId, groupId);
     console.log(
       `[stripe-webhook] processSubscription completado para ${email} sub=${sub.id}`,
     );
@@ -191,12 +194,12 @@ async function processYearlyOrder(
   userId: number,
   email: string,
   courseId: number,
+  groupId: number | null = null,
 ) {
   const isPaid = session.payment_status === "paid";
   const paidAt = isPaid ? new Date() : null;
-  const expiresAt = paidAt
-    ? new Date(paidAt.getTime() + YEARLY_ACCESS_DAYS * 24 * 60 * 60 * 1000)
-    : null;
+  // Pago único = curso completo, acceso vitalicio (sin caducidad).
+  const expiresAt: Date | null = null;
 
   console.log(
     `[stripe-webhook] processYearlyOrder isPaid=${isPaid} amount=${session.amount_total} sessionId=${session.id}`,
@@ -233,7 +236,7 @@ async function processYearlyOrder(
     return;
   }
 
-  // Enrollment YEARLY (one-time) → expira en 365 días.
+  // Enrollment YEARLY (one-time) → acceso vitalicio (curso completo, sin caducidad).
   // Si el usuario ya tenía una SUBSCRIPTION para este curso, la "yearly"
   // gana en expiresAt: extendemos el acceso al máximo entre los dos.
   const existing = await prisma.enrollment.findUnique({
@@ -252,18 +255,25 @@ async function processYearlyOrder(
       status: "ACTIVE",
       orderId: order.id,
       expiresAt: finalExpiresAt,
+      ...(groupId !== null ? { groupId } : {}),
     },
     update: {
       source: "ONE_TIME",
       status: "ACTIVE",
       orderId: order.id,
       expiresAt: finalExpiresAt,
+      ...(groupId !== null ? { groupId } : {}),
     },
   });
 
   console.log(
-    `[stripe-webhook] Enrollment ONE_TIME upserted user=${userId} course=${courseId} expiresAt=${finalExpiresAt?.toISOString() ?? "null"}`,
+    `[stripe-webhook] Enrollment ONE_TIME upserted user=${userId} course=${courseId} group=${groupId ?? 'none'} expiresAt=${finalExpiresAt?.toISOString() ?? "null"}`,
   );
+
+  // Decrementar plazas del grupo de forma atómica
+  if (groupId !== null) {
+    await assignGroupSpot(groupId, userId, courseId);
+  }
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
@@ -355,6 +365,7 @@ async function processSubscription(
   sub: Stripe.Subscription,
   userId: number,
   courseId: number,
+  groupId: number | null = null,
 ) {
   const stripeCustomerId =
     typeof sub.customer === "string" ? sub.customer : sub.customer.id;
@@ -429,6 +440,7 @@ async function processSubscription(
     courseId,
     status,
     subscription.currentPeriodEnd,
+    groupId,
   );
 }
 
@@ -438,6 +450,7 @@ async function syncMonthlyEnrollment(
   courseId: number,
   status: ReturnType<typeof mapSubscriptionStatus>,
   currentPeriodEnd: Date,
+  groupId: number | null = null,
 ) {
   const isActive = status === "ACTIVE" || status === "TRIALING";
   const existing = await prisma.enrollment.findUnique({
@@ -459,6 +472,11 @@ async function syncMonthlyEnrollment(
       return;
     }
 
+    const isNew = !(await prisma.enrollment.findUnique({
+      where: { userId_courseId: { userId, courseId } },
+      select: { id: true },
+    }));
+
     await prisma.enrollment.upsert({
       where: { userId_courseId: { userId, courseId } },
       create: {
@@ -468,17 +486,24 @@ async function syncMonthlyEnrollment(
         status: "ACTIVE",
         subscriptionId,
         expiresAt: currentPeriodEnd,
+        ...(groupId !== null ? { groupId } : {}),
       },
       update: {
         source: "SUBSCRIPTION",
         status: "ACTIVE",
         subscriptionId,
         expiresAt: currentPeriodEnd,
+        ...(groupId !== null ? { groupId } : {}),
       },
     });
     console.log(
-      `[stripe-webhook] Enrollment SUBSCRIPTION upserted user=${userId} course=${courseId} expiresAt=${currentPeriodEnd.toISOString()}`,
+      `[stripe-webhook] Enrollment SUBSCRIPTION upserted user=${userId} course=${courseId} group=${groupId ?? 'none'} expiresAt=${currentPeriodEnd.toISOString()}`,
     );
+
+    // Solo decrementamos plazas en la primera suscripción (no en cada renovación)
+    if (groupId !== null && isNew) {
+      await assignGroupSpot(groupId, userId, courseId);
+    }
   } else {
     // Sub cancelada/past_due → marcar EXPIRED sólo si el Enrollment vino de
     // ESTA suscripción (no tocar un ONE_TIME).
@@ -486,6 +511,44 @@ async function syncMonthlyEnrollment(
       where: { subscriptionId, source: "SUBSCRIPTION" },
       data: { status: "EXPIRED" },
     });
+  }
+}
+
+/**
+ * Incrementa plazasOcupadas en el grupo de forma atómica.
+ * Si el grupo está lleno, asigna de todas formas pero deja un aviso en el log
+ * para que el admin pueda resolver el caso edge manualmente.
+ */
+async function assignGroupSpot(groupId: number, userId: number, courseId: number) {
+  try {
+    await prisma.$transaction(async (tx) => {
+      const group = await tx.courseGroup.findUnique({
+        where: { id: groupId },
+        select: { plazasTotal: true, plazasOcupadas: true, nombre: true, dia: true, franja: true },
+      });
+
+      if (!group) {
+        console.warn(`[stripe-webhook] Grupo ${groupId} no encontrado — no se decrementa`);
+        return;
+      }
+
+      if (group.plazasOcupadas >= group.plazasTotal) {
+        console.warn(
+          `[stripe-webhook] Grupo ${groupId} (${group.nombre} ${group.dia}-${group.franja}) ` +
+          `está lleno (${group.plazasOcupadas}/${group.plazasTotal}) — asignando igualmente, revisar manualmente`,
+        );
+      }
+
+      await tx.courseGroup.update({
+        where: { id: groupId },
+        data: { plazasOcupadas: { increment: 1 } },
+      });
+    });
+
+    console.log(`[stripe-webhook] plazasOcupadas +1 en grupo ${groupId} para user=${userId} course=${courseId}`);
+  } catch (err) {
+    // No bloqueamos el flujo de pago si falla el conteo
+    console.error(`[stripe-webhook] Error actualizando plazas del grupo ${groupId}`, err);
   }
 }
 

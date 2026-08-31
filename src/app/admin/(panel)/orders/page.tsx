@@ -94,7 +94,7 @@ export default async function OrdersPage({
       <header className="mb-6">
         <h1 className="text-3xl font-semibold">Orders</h1>
         <p className="text-slate-400 text-sm mt-1">
-          Pagos one-time (incluye anuales). {total.toLocaleString("es-ES")}{" "}
+          Pagos one-time (curso completo). {total.toLocaleString("es-ES")}{" "}
           totales con los filtros actuales.
         </p>
       </header>

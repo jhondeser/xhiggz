@@ -8,7 +8,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { modelRegistry, preloadModel, type ModelKey } from "@/components/three/modelRegistry";
-import { Clock, GraduationCap, ArrowRight, Sparkles } from "lucide-react";
+import { Clock, GraduationCap, ArrowRight, Sparkles, Calendar } from "lucide-react";
+
+interface GroupInfo {
+  nombre: string;
+  dia: string;
+  franja: string;
+  horaInicio: string;
+  horaFin: string;
+}
 
 interface EnrolledCourseCardProps {
   slug: string;
@@ -24,10 +32,11 @@ interface EnrolledCourseCardProps {
   horas?: number | null;
   source: "ONE_TIME" | "SUBSCRIPTION" | "MANUAL";
   expiresAt?: Date | null;
+  group?: GroupInfo;
 }
 
 const SOURCE_LABEL: Record<string, string> = {
-  ONE_TIME: "Acceso anual",
+  ONE_TIME: "Curso completo",
   SUBSCRIPTION: "Suscripción mensual",
   MANUAL: "Acceso manual",
 };
@@ -46,6 +55,7 @@ export default function EnrolledCourseCard({
   horas,
   source,
   expiresAt,
+  group,
 }: EnrolledCourseCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -180,6 +190,21 @@ export default function EnrolledCourseCard({
               )}
             </div>
 
+            {/* Horario asignado */}
+            {group && (
+              <div className="mb-3 flex items-center gap-2 bg-cyan-500/15 border border-cyan-400/30 rounded-xl px-3 py-2">
+                <Calendar className="w-4 h-4 text-cyan-300 shrink-0" />
+                <div className="min-w-0">
+                  <span className="text-cyan-200 text-xs font-semibold">
+                    {group.nombre} · {group.dia}
+                  </span>
+                  <span className="text-cyan-300/70 text-xs ml-2">
+                    {group.horaInicio}–{group.horaFin}
+                  </span>
+                </div>
+              </div>
+            )}
+
             {/* Acceso */}
             <div className="border-t border-white/20 pt-4">
               <div className="flex items-center justify-between">
@@ -255,10 +280,20 @@ export default function EnrolledCourseCard({
               )}
             </div>
 
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 mb-4">
+            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 mb-2">
               <div className="text-xs text-gray-300">{SOURCE_LABEL[source]}</div>
               <div className="text-sm font-semibold text-emerald-300">{accessLabel}</div>
             </div>
+
+            {group && (
+              <div className="flex items-center gap-2 bg-cyan-500/10 border border-cyan-400/20 rounded-lg px-3 py-2 mb-4">
+                <Calendar className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <div className="text-xs text-cyan-200">
+                  <span className="font-semibold">{group.nombre}</span>
+                  {" · "}{group.dia}{" · "}{group.horaInicio}–{group.horaFin}
+                </div>
+              </div>
+            )}
 
             <div className="mt-auto">
               <button

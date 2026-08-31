@@ -9,12 +9,6 @@ export const STRIPE_CURRENCY = "eur";
 /** Plan que el usuario elige al comprar un curso */
 export type CoursePlan = "monthly" | "yearly";
 
-/**
- * Cuántos días de acceso da el plan anual one-time.
- * Si después quieres "365 días desde la compra" o "hasta el 31 dic" cámbialo aquí.
- */
-export const YEARLY_ACCESS_DAYS = 365;
-
 /** Base URL absoluta para construir success_url y cancel_url. */
 export function getBaseUrl(): string {
   const url = process.env.NEXT_PUBLIC_BASE_URL;

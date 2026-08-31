@@ -154,6 +154,7 @@ model Course {
   orders        Order[]
   leads         Lead[]
   subscriptions Subscription[]
+  groups        CourseGroup[]
 
   @@index([categoria])
   @@index([destacado])
@@ -187,6 +188,10 @@ model Enrollment {
   order          Order?        @relation(fields: [orderId], references: [id])
   subscriptionId Int?
   subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  // Grupo asignado (franja + día). Se rellena en el webhook tras pagar.
+  groupId    Int?
+  group      CourseGroup? @relation(fields: [groupId], references: [id])
 
   enrolledAt DateTime  @default(now())
   // null = acceso vitalicio. Si viene de suscripción, se actualiza con
@@ -321,6 +326,39 @@ model Subscription {
   @@index([userId])
   @@index([courseId])
   @@index([status])
+}
+
+// Grupo de clase: un curso puede tener varios grupos en distintos días/franjas.
+// El alumno elige un grupo en el checkout; su Enrollment queda vinculado a él.
+model CourseGroup {
+  id      Int    @id @default(autoincrement())
+  courseId Int
+  course  Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // Identificador legible: "Grupo 1", "Grupo 2", etc.
+  nombre String
+
+  // Día de la semana en español: "Lunes", "Martes", …, "Sábado"
+  dia    String
+  // Franja horaria: "A", "B" o "C"
+  franja String
+  // Hora de inicio y fin (texto), p.ej. "16:30" / "18:00"
+  horaInicio String
+  horaFin    String
+
+  // Control de aforo
+  plazasTotal    Int @default(10)
+  plazasOcupadas Int @default(0)
+
+  activo Boolean @default(true)
+
+  enrollments Enrollment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@index([activo])
 }
 
 // Magic link tokens para login passwordless. Se guarda el HASH del token, no

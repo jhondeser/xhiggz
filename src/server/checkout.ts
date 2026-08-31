@@ -24,6 +24,8 @@ interface CreateCourseCheckoutInput {
   customerEmail: string;
   /** Nombre opcional, para pre-rellenar el form de Stripe */
   customerName?: string;
+  /** ID del CourseGroup elegido por el alumno (paso 2 del checkout) */
+  groupId?: number;
 }
 
 /**
@@ -73,6 +75,7 @@ export async function createCourseCheckout(
       courseId: String(course.id),
       courseSlug: course.slug,
       customerName: input.customerName ?? "",
+      ...(input.groupId !== undefined ? { groupId: String(input.groupId) } : {}),
     },
     success_url: urls.success,
     cancel_url: urls.cancel,
@@ -81,21 +84,17 @@ export async function createCourseCheckout(
 
   // Replicamos la metadata en el objeto secundario (PaymentIntent o Subscription)
   // para que aparezca también en el dashboard de Stripe y en eventos posteriores.
+  const sharedMeta = {
+    courseId: String(course.id),
+    courseSlug: course.slug,
+    customerName: input.customerName ?? "",
+    ...(input.groupId !== undefined ? { groupId: String(input.groupId) } : {}),
+  };
+
   if (isSubscription) {
-    sessionParams.subscription_data = {
-      metadata: {
-        courseId: String(course.id),
-        courseSlug: course.slug,
-        customerName: input.customerName ?? "",
-      },
-    };
+    sessionParams.subscription_data = { metadata: sharedMeta };
   } else {
-    sessionParams.payment_intent_data = {
-      metadata: {
-        courseId: String(course.id),
-        courseSlug: course.slug,
-      },
-    };
+    sessionParams.payment_intent_data = { metadata: sharedMeta };
   }
 
   const session = await stripe.checkout.sessions.create(sessionParams);
