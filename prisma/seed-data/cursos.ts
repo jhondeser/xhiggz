@@ -1076,10 +1076,10 @@ export const courses: Course[] = [
     img: "/images/cursos_img/web_card_lvl1.png",
 
     nivel: "Principiante",
-    duracion: "12 semanas",
+    duracion: "24 semanas",
     precio: {
       mensual: 69,
-      completo: 179,
+      completo: 359,
       moneda: "€",
     },
     rating: 5,
@@ -1098,8 +1098,8 @@ export const courses: Course[] = [
     ],
 
     contenido: {
-      modulos: 12,
-      horas: 18,
+      modulos: 24,
+      horas: 36,
       proyectos: 1,
     },
 
@@ -1157,37 +1157,55 @@ export const courses: Course[] = [
           "Qué es una página web",
           "Cómo funciona internet de forma básica",
           "Diferencia entre frontend y backend",
-          "Qué es HTML, CSS y JavaScript (visión general)",
-          "Cómo se relacionan los tres lenguajes entre sí",
         ],
       },
       {
         modulo: "Introducción al Mundo Web – Parte 2",
         semanas: "Semana 2",
         temas: [
+          "Qué es HTML, CSS y JavaScript (visión general)",
+          "Cómo se relacionan los tres lenguajes entre sí",
           "Instalación de Visual Studio Code",
+        ],
+      },
+      {
+        modulo: "Introducción al Mundo Web – Parte 3",
+        semanas: "Semana 3",
+        temas: [
           "Extensiones recomendadas para el curso",
           "Estructura básica de carpetas y archivos de un proyecto web",
+        ],
+      },
+      {
+        modulo: "Introducción al Mundo Web – Parte 4",
+        semanas: "Semana 4",
+        temas: [
           "Creación del primer archivo index.html",
           "Visualizar el archivo en el navegador",
         ],
       },
       {
         modulo: "HTML: La Estructura de la Web – Parte 1",
-        semanas: "Semana 3",
+        semanas: "Semana 5",
         temas: [
           "Estructura básica de un documento HTML",
           "Títulos y párrafos",
           "Imágenes y enlaces",
-          "Listas ordenadas y desordenadas",
-          "Botones básicos",
         ],
       },
       {
         modulo: "HTML: La Estructura de la Web – Parte 2",
-        semanas: "Semana 4",
+        semanas: "Semana 6",
         temas: [
+          "Listas ordenadas y desordenadas",
+          "Botones básicos",
           "Formularios básicos",
+        ],
+      },
+      {
+        modulo: "HTML: La Estructura de la Web – Parte 3",
+        semanas: "Semana 7",
+        temas: [
           "Etiquetas semánticas: header, main, section y footer",
           "Buenas prácticas de estructura HTML",
           "Creación de una página HTML completa sin estilos",
@@ -1195,45 +1213,69 @@ export const courses: Course[] = [
       },
       {
         modulo: "CSS: Diseño Visual – Parte 1",
-        semanas: "Semana 5",
+        semanas: "Semana 8",
         temas: [
           "Qué es CSS y para qué sirve",
           "Cómo conectar CSS con HTML",
           "Selectores, clases e identificadores",
-          "Colores y fondos",
-          "Tipografías y tamaños de texto",
         ],
       },
       {
         modulo: "CSS: Diseño Visual – Parte 2",
-        semanas: "Semana 6",
+        semanas: "Semana 9",
         temas: [
+          "Colores y fondos",
+          "Tipografías y tamaños de texto",
           "Márgenes y padding",
+        ],
+      },
+      {
+        modulo: "CSS: Diseño Visual – Parte 3",
+        semanas: "Semana 10",
+        temas: [
           "Bordes y sombras",
           "Box model explicado visualmente",
+        ],
+      },
+      {
+        modulo: "CSS: Diseño Visual – Parte 4",
+        semanas: "Semana 11",
+        temas: [
           "Diseño de cards visuales con CSS",
           "Buenas prácticas de escritura CSS",
         ],
       },
       {
-        modulo: "Layouts con Flexbox",
-        semanas: "Semana 7",
+        modulo: "Layouts con Flexbox – Parte 1",
+        semanas: "Semana 12",
         temas: [
           "Display block, inline e inline-block",
           "Introducción a Flexbox",
           "Ejes principal y cruzado",
+        ],
+      },
+      {
+        modulo: "Layouts con Flexbox – Parte 2",
+        semanas: "Semana 13",
+        temas: [
           "Alineación de elementos con justify-content y align-items",
           "Uso de gap y espaciado entre elementos",
           "Creación de una barra de navegación con Flexbox",
         ],
       },
       {
-        modulo: "CSS Grid y Responsive Design",
-        semanas: "Semana 8",
+        modulo: "CSS Grid y Responsive Design – Parte 1",
+        semanas: "Semana 14",
         temas: [
           "Introducción a CSS Grid",
           "Columnas y filas",
           "Diseño de secciones con Grid",
+        ],
+      },
+      {
+        modulo: "CSS Grid y Responsive Design – Parte 2",
+        semanas: "Semana 15",
+        temas: [
           "Qué son las media queries",
           "Diseño mobile first",
           "Creación de una sección responsive de tarjetas",
@@ -1241,47 +1283,77 @@ export const courses: Course[] = [
       },
       {
         modulo: "JavaScript Básico – Parte 1",
-        semanas: "Semana 9",
+        semanas: "Semana 16",
         temas: [
           "Qué es JavaScript y para qué sirve",
           "Cómo conectar JavaScript con HTML",
           "Variables: let y const",
+        ],
+      },
+      {
+        modulo: "JavaScript Básico – Parte 2",
+        semanas: "Semana 17",
+        temas: [
           "Tipos de datos: string, number, boolean",
           "Condicionales: if / else",
           "Funciones básicas",
         ],
       },
       {
-        modulo: "JavaScript Básico – Parte 2",
-        semanas: "Semana 10",
+        modulo: "JavaScript Básico – Parte 3",
+        semanas: "Semana 18",
         temas: [
           "Arrays y objetos",
           "Bucles básicos",
+        ],
+      },
+      {
+        modulo: "JavaScript Básico – Parte 4",
+        semanas: "Semana 19",
+        temas: [
           "Eventos del DOM: click, mouseover",
           "Seleccionar elementos con getElementById y querySelector",
+        ],
+      },
+      {
+        modulo: "JavaScript Básico – Parte 5",
+        semanas: "Semana 20",
+        temas: [
           "Interacciones simples con botones",
           "Mini ejercicio: contador de clics",
         ],
       },
       {
         modulo: "Proyecto Final: Landing Page – Parte 1",
-        semanas: "Semana 11",
+        semanas: "Semana 21",
         temas: [
           "Planificación y estructura de la landing page",
           "Creación del header y barra de navegación",
           "Hero section con imagen de fondo y texto",
-          "Sección de información o características",
-          "Buenas prácticas de organización del proyecto",
         ],
       },
       {
         modulo: "Proyecto Final: Landing Page – Parte 2",
-        semanas: "Semana 12",
+        semanas: "Semana 22",
         temas: [
+          "Sección de información o características",
+          "Buenas prácticas de organización del proyecto",
           "Sección de cards de productos o contenido",
+        ],
+      },
+      {
+        modulo: "Proyecto Final: Landing Page – Parte 3",
+        semanas: "Semana 23",
+        temas: [
           "Footer con enlaces y redes sociales",
           "Interacción básica con JavaScript",
           "Adaptación responsive completa",
+        ],
+      },
+      {
+        modulo: "Proyecto Final: Landing Page – Parte 4",
+        semanas: "Semana 24",
+        temas: [
           "Revisión final y corrección de errores",
           "Presentación del proyecto final",
         ],
@@ -1300,10 +1372,10 @@ export const courses: Course[] = [
     img: "/images/cursos_img/web_card_lvl2.png",
 
     nivel: "Intermedio",
-    duracion: "16 semanas",
+    duracion: "28 semanas",
     precio: {
       mensual: 69,
-      completo: 239,
+      completo: 419,
       moneda: "€",
     },
     rating: 5,
@@ -1322,8 +1394,8 @@ export const courses: Course[] = [
     ],
 
     contenido: {
-      modulos: 16,
-      horas: 24,
+      modulos: 28,
+      horas: 42,
       proyectos: 1,
     },
 
@@ -1381,60 +1453,90 @@ export const courses: Course[] = [
           "Repaso de variables, funciones y condicionales",
           "Arrays y objetos en profundidad",
           "Acceder y modificar propiedades de objetos",
-          "Recorrer arrays con bucles",
-          "Introducción a los métodos de arrays",
         ],
       },
       {
         modulo: "JavaScript Intermedio – Parte 2",
         semanas: "Semana 2",
         temas: [
+          "Recorrer arrays con bucles",
+          "Introducción a los métodos de arrays",
           "Métodos de arrays: map, filter, find y forEach",
+        ],
+      },
+      {
+        modulo: "JavaScript Intermedio – Parte 3",
+        semanas: "Semana 3",
+        temas: [
           "Funciones flecha",
           "Template literals",
+        ],
+      },
+      {
+        modulo: "JavaScript Intermedio – Parte 4",
+        semanas: "Semana 4",
+        temas: [
           "Organización básica del código en funciones",
           "Renderizado de listas desde datos en JavaScript",
         ],
       },
       {
         modulo: "DOM y Eventos – Parte 1",
-        semanas: "Semana 3",
+        semanas: "Semana 5",
         temas: [
           "Qué es el DOM y cómo funciona",
           "Selección de elementos con querySelector",
           "Selección múltiple con querySelectorAll",
-          "Modificar textos y atributos desde JavaScript",
-          "Agregar y quitar clases dinámicamente",
         ],
       },
       {
         modulo: "DOM y Eventos – Parte 2",
-        semanas: "Semana 4",
+        semanas: "Semana 6",
         temas: [
+          "Modificar textos y atributos desde JavaScript",
+          "Agregar y quitar clases dinámicamente",
           "Crear elementos HTML desde JavaScript",
+        ],
+      },
+      {
+        modulo: "DOM y Eventos – Parte 3",
+        semanas: "Semana 7",
+        temas: [
           "Eliminar elementos del DOM",
           "Eventos: click, input, submit y change",
+        ],
+      },
+      {
+        modulo: "DOM y Eventos – Parte 4",
+        semanas: "Semana 8",
+        temas: [
           "Escuchar eventos con addEventListener",
           "Creación de una mini aplicación interactiva",
         ],
       },
       {
         modulo: "LocalStorage y Persistencia – Parte 1",
-        semanas: "Semana 5",
+        semanas: "Semana 9",
         temas: [
           "Qué es la persistencia de datos",
           "Qué es LocalStorage y cuándo usarlo",
           "Guardar información en el navegador",
           "Leer información guardada",
-          "Eliminar datos del navegador",
         ],
       },
       {
         modulo: "LocalStorage y Persistencia – Parte 2",
-        semanas: "Semana 6",
+        semanas: "Semana 10",
         temas: [
+          "Eliminar datos del navegador",
           "Uso de JSON.stringify para guardar objetos",
           "Uso de JSON.parse para recuperar datos",
+        ],
+      },
+      {
+        modulo: "LocalStorage y Persistencia – Parte 3",
+        semanas: "Semana 11",
+        temas: [
           "Creación de una lista persistente (to-do list)",
           "Sistema básico de favoritos con LocalStorage",
           "Sincronizar la UI con los datos guardados",
@@ -1442,21 +1544,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Tailwind CSS – Parte 1",
-        semanas: "Semana 7",
+        semanas: "Semana 12",
         temas: [
           "Qué es Tailwind CSS y por qué usarlo",
           "Diferencia entre CSS tradicional y utility classes",
           "Colores y fondos con Tailwind",
           "Espaciado, tamaños y bordes",
-          "Tipografía con clases de Tailwind",
         ],
       },
       {
         modulo: "Tailwind CSS – Parte 2",
-        semanas: "Semana 8",
+        semanas: "Semana 13",
         temas: [
+          "Tipografía con clases de Tailwind",
           "Flexbox con Tailwind",
           "Grid con Tailwind",
+        ],
+      },
+      {
+        modulo: "Tailwind CSS – Parte 3",
+        semanas: "Semana 14",
+        temas: [
           "Responsive design con prefijos (sm, md, lg)",
           "Hover, focus y transiciones",
           "Creación de cards, botones y formularios modernos",
@@ -1464,21 +1572,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Fundamentos de UI/UX – Parte 1",
-        semanas: "Semana 9",
+        semanas: "Semana 15",
         temas: [
           "Qué es UI y qué es UX",
           "Diferencia entre diseño bonito y diseño funcional",
           "Jerarquía visual",
           "Contraste y uso del espacio en blanco",
-          "Tipografía: cómo elegir y combinar fuentes",
         ],
       },
       {
         modulo: "Fundamentos de UI/UX – Parte 2",
-        semanas: "Semana 10",
+        semanas: "Semana 16",
         temas: [
+          "Tipografía: cómo elegir y combinar fuentes",
           "Paletas de colores y cómo aplicarlas",
           "Diseño de botones, cards y formularios efectivos",
+        ],
+      },
+      {
+        modulo: "Fundamentos de UI/UX – Parte 3",
+        semanas: "Semana 17",
+        temas: [
           "Diseño mobile first",
           "Creación de wireframes básicos a mano o en Figma",
           "Evaluación de interfaces reales: qué funciona y qué no",
@@ -1486,44 +1600,68 @@ export const courses: Course[] = [
       },
       {
         modulo: "Introducción a APIs – Parte 1",
-        semanas: "Semana 11",
+        semanas: "Semana 18",
         temas: [
           "Qué es una API y para qué sirve",
           "Qué es un endpoint",
           "Qué es JSON y cómo leerlo",
+        ],
+      },
+      {
+        modulo: "Introducción a APIs – Parte 2",
+        semanas: "Semana 19",
+        temas: [
           "Introducción a HTTP y los métodos GET y POST",
           "Explorar una API pública desde el navegador",
         ],
       },
       {
-        modulo: "Introducción a APIs – Parte 2",
-        semanas: "Semana 12",
+        modulo: "Introducción a APIs – Parte 3",
+        semanas: "Semana 20",
         temas: [
           "Uso de fetch para hacer peticiones",
           "Qué son las Promesas",
+        ],
+      },
+      {
+        modulo: "Introducción a APIs – Parte 4",
+        semanas: "Semana 21",
+        temas: [
           "Async y await",
           "Estados de carga (loading)",
+        ],
+      },
+      {
+        modulo: "Introducción a APIs – Parte 5",
+        semanas: "Semana 22",
+        temas: [
           "Manejo básico de errores",
           "Primera conexión real con una API pública",
         ],
       },
       {
         modulo: "Buscadores, Filtros y Renderizado – Parte 1",
-        semanas: "Semana 13",
+        semanas: "Semana 23",
         temas: [
           "Inputs de búsqueda conectados a datos",
           "Eventos de input en tiempo real",
           "Filtrado de arrays con filter",
           "Renderizado condicional de elementos",
-          "Mensaje de estado vacío: sin resultados",
         ],
       },
       {
         modulo: "Buscadores, Filtros y Renderizado – Parte 2",
-        semanas: "Semana 14",
+        semanas: "Semana 24",
         temas: [
+          "Mensaje de estado vacío: sin resultados",
           "Loading states visuales durante la carga",
           "Manejo de errores en el renderizado",
+        ],
+      },
+      {
+        modulo: "Buscadores, Filtros y Renderizado – Parte 3",
+        semanas: "Semana 25",
+        temas: [
           "Cards dinámicas generadas desde datos",
           "Organización del código para proyectos con datos",
           "Práctica: catálogo filtrable con API real",
@@ -1531,21 +1669,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Proyecto Final: App Interactiva – Parte 1",
-        semanas: "Semana 15",
+        semanas: "Semana 26",
         temas: [
           "Planificación de la aplicación y elección de API pública",
           "Diseño de la interfaz con Tailwind CSS",
           "Estructura de carpetas y archivos del proyecto",
           "Consumo de datos externos con fetch y async/await",
-          "Creación del buscador o sistema de filtros",
         ],
       },
       {
         modulo: "Proyecto Final: App Interactiva – Parte 2",
-        semanas: "Semana 16",
+        semanas: "Semana 27",
         temas: [
+          "Creación del buscador o sistema de filtros",
           "Renderizado dinámico de resultados",
           "Sistema de favoritos con LocalStorage",
+        ],
+      },
+      {
+        modulo: "Proyecto Final: App Interactiva – Parte 3",
+        semanas: "Semana 28",
+        temas: [
           "Diseño responsive completo",
           "Revisión final y corrección de errores",
           "Presentación del proyecto final",
@@ -1565,10 +1709,10 @@ export const courses: Course[] = [
     img: "/images/cursos_img/web_card_lvl3.png",
 
     nivel: "Avanzado",
-    duracion: "20 semanas",
+    duracion: "36 semanas",
     precio: {
       mensual: 79,
-      completo: 349,
+      completo: 615,
       moneda: "€",
     },
     rating: 5,
@@ -1587,8 +1731,8 @@ export const courses: Course[] = [
     ],
 
     contenido: {
-      modulos: 20,
-      horas: 30,
+      modulos: 36,
+      horas: 54,
       proyectos: 1,
     },
 
@@ -1649,15 +1793,21 @@ export const courses: Course[] = [
           "Diferencia entre React y JavaScript puro",
           "Estructura básica de un proyecto React",
           "JSX: JavaScript con sintaxis HTML",
-          "Creación del primer componente",
         ],
       },
       {
         modulo: "Introducción a React – Parte 2",
         semanas: "Semana 2",
         temas: [
+          "Creación del primer componente",
           "Props: pasar datos entre componentes",
           "Eventos en React",
+        ],
+      },
+      {
+        modulo: "Introducción a React – Parte 3",
+        semanas: "Semana 3",
+        temas: [
           "Estado con useState",
           "Renderizado condicional",
           "Renderizado de listas en React",
@@ -1665,21 +1815,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Formularios, Estado y Componentes – Parte 1",
-        semanas: "Semana 3",
+        semanas: "Semana 4",
         temas: [
           "Estado local y cómo actualizarlo",
           "Inputs controlados",
           "Formularios en React",
           "Comunicación entre componentes con props",
-          "Props dinámicas y callbacks",
         ],
       },
       {
         modulo: "Formularios, Estado y Componentes – Parte 2",
-        semanas: "Semana 4",
+        semanas: "Semana 5",
         temas: [
+          "Props dinámicas y callbacks",
           "Actualización de listas desde el estado",
           "Agregar elementos desde formularios",
+        ],
+      },
+      {
+        modulo: "Formularios, Estado y Componentes – Parte 3",
+        semanas: "Semana 6",
+        temas: [
           "Editar elementos existentes",
           "Eliminar elementos de la lista",
           "Separación de componentes por responsabilidad",
@@ -1687,21 +1843,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Hooks y Consumo de APIs – Parte 1",
-        semanas: "Semana 5",
+        semanas: "Semana 7",
         temas: [
           "Qué es useEffect y cuándo usarlo",
           "Consumo de APIs externas desde React",
           "Estados de carga (loading)",
           "Estados de error",
-          "Renderizado dinámico de datos externos",
         ],
       },
       {
         modulo: "Hooks y Consumo de APIs – Parte 2",
-        semanas: "Semana 6",
+        semanas: "Semana 8",
         temas: [
+          "Renderizado dinámico de datos externos",
           "Separación de lógica en funciones y hooks",
           "Componentes de presentación vs componentes lógicos",
+        ],
+      },
+      {
+        modulo: "Hooks y Consumo de APIs – Parte 3",
+        semanas: "Semana 9",
+        temas: [
           "Buscadores en React conectados a datos",
           "Filtros básicos sobre datos externos",
           "Buenas prácticas iniciales de organización en React",
@@ -1709,21 +1871,27 @@ export const courses: Course[] = [
       },
       {
         modulo: "Introducción a Next.js – Parte 1",
-        semanas: "Semana 7",
+        semanas: "Semana 10",
         temas: [
           "Qué es Next.js y para qué sirve",
           "Diferencias clave entre React y Next.js",
           "Creación de un proyecto con Next.js",
           "App Router: qué es y cómo funciona",
-          "Estructura de carpetas de un proyecto Next.js",
         ],
       },
       {
         modulo: "Introducción a Next.js – Parte 2",
-        semanas: "Semana 8",
+        semanas: "Semana 11",
         temas: [
+          "Estructura de carpetas de un proyecto Next.js",
           "Creación de páginas en Next.js",
           "Layouts y su reutilización",
+        ],
+      },
+      {
+        modulo: "Introducción a Next.js – Parte 3",
+        semanas: "Semana 12",
+        temas: [
           "Componentes compartidos entre páginas",
           "Navegación entre páginas con Link",
           "Manejo de imágenes y assets con Next.js",
@@ -1731,132 +1899,204 @@ export const courses: Course[] = [
       },
       {
         modulo: "Rutas Dinámicas y Arquitectura – Parte 1",
-        semanas: "Semana 9",
+        semanas: "Semana 13",
         temas: [
           "Qué son las rutas dinámicas",
           "Parámetros de ruta con useParams",
           "Creación de páginas de detalle",
-          "Organización de componentes en carpetas",
-          "Separación por carpetas: data, components, sections",
         ],
       },
       {
         modulo: "Rutas Dinámicas y Arquitectura – Parte 2",
-        semanas: "Semana 10",
+        semanas: "Semana 14",
         temas: [
+          "Organización de componentes en carpetas",
+          "Separación por carpetas: data, components, sections",
           "Reutilización de componentes entre páginas",
+        ],
+      },
+      {
+        modulo: "Rutas Dinámicas y Arquitectura – Parte 3",
+        semanas: "Semana 15",
+        temas: [
           "Creación de catálogos dinámicos",
           "Navegación entre tarjetas y páginas de detalle",
+        ],
+      },
+      {
+        modulo: "Rutas Dinámicas y Arquitectura – Parte 4",
+        semanas: "Semana 16",
+        temas: [
           "Paso de datos entre páginas",
           "Práctica: mini catálogo con rutas dinámicas",
         ],
       },
       {
         modulo: "APIs Propias en Next.js – Parte 1",
-        semanas: "Semana 11",
+        semanas: "Semana 17",
         temas: [
           "Qué es una API propia y qué es backend",
           "Métodos HTTP: GET, POST, PUT y DELETE",
           "Qué son los Route Handlers en Next.js",
-          "Creación de un endpoint GET básico",
-          "Probar endpoints con el navegador y herramientas básicas",
         ],
       },
       {
         modulo: "APIs Propias en Next.js – Parte 2",
-        semanas: "Semana 12",
+        semanas: "Semana 18",
         temas: [
+          "Creación de un endpoint GET básico",
+          "Probar endpoints con el navegador y herramientas básicas",
           "Enviar datos desde el frontend al backend",
+        ],
+      },
+      {
+        modulo: "APIs Propias en Next.js – Parte 3",
+        semanas: "Semana 19",
+        temas: [
           "Recibir y procesar datos en el Route Handler",
           "Respuestas en formato JSON",
+        ],
+      },
+      {
+        modulo: "APIs Propias en Next.js – Parte 4",
+        semanas: "Semana 20",
+        temas: [
           "Validación básica de datos recibidos",
           "Manejo de errores en la API",
         ],
       },
       {
         modulo: "Bases de Datos con Supabase – Parte 1",
-        semanas: "Semana 13",
+        semanas: "Semana 21",
         temas: [
           "Qué es una base de datos y para qué sirve",
           "Tablas, campos y registros",
           "Relaciones básicas entre tablas",
-          "Qué es Supabase",
-          "Creación de un proyecto en Supabase",
         ],
       },
       {
         modulo: "Bases de Datos con Supabase – Parte 2",
-        semanas: "Semana 14",
+        semanas: "Semana 22",
         temas: [
+          "Qué es Supabase",
+          "Creación de un proyecto en Supabase",
           "Creación de tablas en Supabase",
+        ],
+      },
+      {
+        modulo: "Bases de Datos con Supabase – Parte 3",
+        semanas: "Semana 23",
+        temas: [
           "Inserción de datos desde el panel",
           "Lectura de datos con el cliente de Supabase",
+        ],
+      },
+      {
+        modulo: "Bases de Datos con Supabase – Parte 4",
+        semanas: "Semana 24",
+        temas: [
           "Actualización de datos",
           "Conexión de Supabase con el proyecto Next.js",
         ],
       },
       {
         modulo: "CRUD Completo – Parte 1",
-        semanas: "Semana 15",
+        semanas: "Semana 25",
         temas: [
           "Repaso del concepto CRUD",
           "Crear registros desde formularios conectados a Supabase",
           "Leer y mostrar registros desde la base de datos",
-          "Actualizar registros existentes desde la interfaz",
-          "Refresco automático de datos tras cada operación",
         ],
       },
       {
         modulo: "CRUD Completo – Parte 2",
-        semanas: "Semana 16",
+        semanas: "Semana 26",
         temas: [
+          "Actualizar registros existentes desde la interfaz",
+          "Refresco automático de datos tras cada operación",
           "Eliminar registros con confirmación previa",
+        ],
+      },
+      {
+        modulo: "CRUD Completo – Parte 3",
+        semanas: "Semana 27",
+        temas: [
           "Validación básica de formularios",
           "Mensajes de éxito y error para el usuario",
+        ],
+      },
+      {
+        modulo: "CRUD Completo – Parte 4",
+        semanas: "Semana 28",
+        temas: [
           "Manejo de estados de carga en operaciones CRUD",
           "Práctica: gestor de contenido completo con CRUD",
         ],
       },
       {
         modulo: "Deploy y Variables de Entorno – Parte 1",
-        semanas: "Semana 17",
+        semanas: "Semana 29",
         temas: [
           "Qué es deploy y qué es hosting",
           "Qué es Vercel y por qué se usa con Next.js",
           "Subir el proyecto a GitHub",
+        ],
+      },
+      {
+        modulo: "Deploy y Variables de Entorno – Parte 2",
+        semanas: "Semana 30",
+        temas: [
           "Conectar el repositorio de GitHub con Vercel",
           "Primer despliegue automático",
         ],
       },
       {
-        modulo: "Deploy y Portafolio – Parte 2",
-        semanas: "Semana 18",
+        modulo: "Deploy y Portafolio – Parte 1",
+        semanas: "Semana 31",
         temas: [
           "Qué son las variables de entorno y para qué sirven",
           "Configurar variables de entorno en Vercel",
           "Errores comunes en deploy y cómo resolverlos",
+        ],
+      },
+      {
+        modulo: "Deploy y Portafolio – Parte 2",
+        semanas: "Semana 32",
+        temas: [
           "Creación del archivo README del proyecto",
           "Capturas y preparación del proyecto para portafolio",
         ],
       },
       {
         modulo: "Proyecto Final: Aplicación Full Stack – Parte 1",
-        semanas: "Semana 19",
+        semanas: "Semana 33",
         temas: [
           "Planificación de la aplicación final",
           "Diseño de la estructura de páginas",
           "Creación de componentes reutilizables",
-          "Configuración de rutas dinámicas",
-          "Conexión con base de datos y primeras consultas",
         ],
       },
       {
         modulo: "Proyecto Final: Aplicación Full Stack – Parte 2",
-        semanas: "Semana 20",
+        semanas: "Semana 34",
         temas: [
+          "Configuración de rutas dinámicas",
+          "Conexión con base de datos y primeras consultas",
           "Implementación del CRUD completo",
+        ],
+      },
+      {
+        modulo: "Proyecto Final: Aplicación Full Stack – Parte 3",
+        semanas: "Semana 35",
+        temas: [
           "Diseño responsive final",
           "Deploy en Vercel con variables de entorno",
+        ],
+      },
+      {
+        modulo: "Proyecto Final: Aplicación Full Stack – Parte 4",
+        semanas: "Semana 36",
+        temas: [
           "Documentación del proyecto",
           "Presentación final de la aplicación",
         ],
