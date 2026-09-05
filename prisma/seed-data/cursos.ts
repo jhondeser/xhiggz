@@ -1079,7 +1079,7 @@ export const courses: Course[] = [
     duracion: "12 semanas",
     precio: {
       mensual: 69,
-      completo: 249,
+      completo: 179,
       moneda: "€",
     },
     rating: 5,
@@ -1303,7 +1303,7 @@ export const courses: Course[] = [
     duracion: "16 semanas",
     precio: {
       mensual: 69,
-      completo: 349,
+      completo: 239,
       moneda: "€",
     },
     rating: 5,
@@ -1568,7 +1568,7 @@ export const courses: Course[] = [
     duracion: "20 semanas",
     precio: {
       mensual: 79,
-      completo: 449,
+      completo: 349,
       moneda: "€",
     },
     rating: 5,
