@@ -32,9 +32,15 @@ async function getData(sp: SP) {
       take: PER_PAGE,
       skip: (page - 1) * PER_PAGE,
       include: {
+        enrollments: {
+          where: { status: "ACTIVE" },
+          include: {
+            course: { select: { title: true } },
+            group: { select: { dia: true, franja: true } },
+          },
+        },
         _count: {
           select: {
-            enrollments: true,
             orders: true,
             subscriptions: true,
           },
@@ -103,7 +109,7 @@ export default async function UsersPage({
               <th className="text-left px-4 py-3">Role</th>
               <th className="text-right px-4 py-3">Orders</th>
               <th className="text-right px-4 py-3">Subs</th>
-              <th className="text-right px-4 py-3">Enrollments</th>
+              <th className="text-left px-4 py-3">Cursos activos</th>
               <th className="text-left px-4 py-3">Stripe Customer</th>
             </tr>
           </thead>
@@ -130,8 +136,23 @@ export default async function UsersPage({
                   <td className="px-4 py-3 text-right">
                     {u._count.subscriptions}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    {u._count.enrollments}
+                  <td className="px-4 py-3 text-xs">
+                    {u.enrollments.length === 0 ? (
+                      <span className="text-slate-600">—</span>
+                    ) : (
+                      <ul className="space-y-1">
+                        {u.enrollments.map((e) => (
+                          <li key={e.id} className="text-slate-300">
+                            {e.course?.title ?? "—"}
+                            {e.group && (
+                              <span className="text-slate-500 ml-1">
+                                ({e.group.dia} {e.group.franja})
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-slate-500 text-xs font-mono">
                     {u.stripeCustomerId ?? "—"}

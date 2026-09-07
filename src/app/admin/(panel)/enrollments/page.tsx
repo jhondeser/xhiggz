@@ -40,6 +40,15 @@ async function getData(sp: SP) {
       include: {
         course: { select: { title: true } },
         user: { select: { name: true, email: true } },
+        group: {
+          select: {
+            nombre: true,
+            dia: true,
+            franja: true,
+            horaInicio: true,
+            horaFin: true,
+          },
+        },
       },
     }),
     prisma.course.findMany({
@@ -154,6 +163,7 @@ export default async function EnrollmentsPage({
               <th className="text-left px-4 py-3">Inscrito</th>
               <th className="text-left px-4 py-3">Usuario</th>
               <th className="text-left px-4 py-3">Curso</th>
+              <th className="text-left px-4 py-3">Grupo</th>
               <th className="text-left px-4 py-3">Origen</th>
               <th className="text-left px-4 py-3">Status</th>
               <th className="text-left px-4 py-3">Expira</th>
@@ -163,7 +173,7 @@ export default async function EnrollmentsPage({
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center text-slate-500 py-12">
+                <td colSpan={8} className="text-center text-slate-500 py-12">
                   Sin resultados con esos filtros.
                 </td>
               </tr>
@@ -186,6 +196,20 @@ export default async function EnrollmentsPage({
                     </td>
                     <td className="px-4 py-3 text-slate-300">
                       {e.course?.title ?? "—"}
+                    </td>
+                    <td className="px-4 py-3 text-xs">
+                      {e.group ? (
+                        <div>
+                          <div className="text-slate-200 font-medium">
+                            {e.group.dia} — Franja {e.group.franja}
+                          </div>
+                          <div className="text-slate-500">
+                            {e.group.horaInicio}–{e.group.horaFin}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-slate-600">Sin grupo</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-slate-400 text-xs">
                       {e.source}
