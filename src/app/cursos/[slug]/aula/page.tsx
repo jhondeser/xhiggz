@@ -10,6 +10,7 @@ import { redirect, notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { toYoutubeEmbedUrl } from "@/lib/video";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardBackground from "@/components/dashboard/DashboardBackground";
 
@@ -98,43 +99,74 @@ export default async function AulaPage({ params }: PageProps) {
               El temario de este curso aún no está cargado en la BD.
             </div>
           ) : (
-            course.temario.map((modulo, idx) => (
-              <details
-                key={modulo.id}
-                className="group bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden"
-                open={idx === 0}
-              >
-                <summary className="cursor-pointer p-6 flex justify-between items-start hover:bg-white/5 list-none">
-                  <div>
-                    <div className="text-white/30 text-xs mb-1">
-                      Módulo {idx + 1} · {modulo.semanas}
+            course.temario.map((modulo, idx) => {
+              const unlocked = modulo.publicado;
+              const embedUrl = unlocked && modulo.videoUrl
+                ? toYoutubeEmbedUrl(modulo.videoUrl)
+                : null;
+              return (
+                <details
+                  key={modulo.id}
+                  className="group bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl overflow-hidden"
+                  open={idx === 0}
+                >
+                  <summary className="cursor-pointer p-6 flex justify-between items-start hover:bg-white/5 list-none">
+                    <div>
+                      <div className="text-white/30 text-xs mb-1">
+                        Módulo {idx + 1} · {modulo.semanas}
+                      </div>
+                      <div className="text-lg font-semibold flex items-center gap-2">
+                        {modulo.modulo}
+                        {!unlocked && (
+                          <span className="text-white/30 text-xs font-normal border border-white/15 rounded-full px-2 py-0.5">
+                            🔒 Bloqueado
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-lg font-semibold">{modulo.modulo}</div>
+                    <div className="text-white/40 text-2xl select-none group-open:rotate-45 transition-transform">
+                      +
+                    </div>
+                  </summary>
+                  <div className="px-6 pb-6 pt-0 border-t border-white/10">
+                    {!unlocked ? (
+                      <div className="mt-4 text-sm text-white/40 bg-white/5 rounded-xl p-4">
+                        Este módulo todavía no está disponible para ti. Se
+                        desbloquea conforme avanza tu clase — te avisamos
+                        cuando esté listo.
+                      </div>
+                    ) : embedUrl ? (
+                      <div className="mt-4 aspect-video w-full rounded-xl overflow-hidden bg-black">
+                        <iframe
+                          src={embedUrl}
+                          title={`Vídeo — ${modulo.modulo}`}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
+                    ) : (
+                      <div className="mt-4 text-sm text-white/40 bg-white/5 rounded-xl p-4">
+                        El vídeo de este módulo se publicará muy pronto.
+                      </div>
+                    )}
+                    <ul className="mt-4 space-y-3">
+                      {modulo.temas.map((tema, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-3 text-sm border-l-2 border-white/10 pl-4 py-1 hover:border-cyan-500/50 transition-colors"
+                        >
+                          <span className="text-white/30 text-xs mt-1 w-6 shrink-0">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="flex-1 text-white/70">{tema}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="text-white/40 text-2xl select-none group-open:rotate-45 transition-transform">
-                    +
-                  </div>
-                </summary>
-                <div className="px-6 pb-6 pt-0 border-t border-white/10">
-                  <ul className="mt-4 space-y-3">
-                    {modulo.temas.map((tema, i) => (
-                      <li
-                        key={i}
-                        className="flex items-start gap-3 text-sm border-l-2 border-white/10 pl-4 py-1 hover:border-cyan-500/50 transition-colors"
-                      >
-                        <span className="text-white/30 text-xs mt-1 w-6 shrink-0">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="flex-1 text-white/70">{tema}</span>
-                        <span className="text-white/20 text-xs italic shrink-0">
-                          Próximamente
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </details>
-            ))
+                </details>
+              );
+            })
           )}
         </div>
 

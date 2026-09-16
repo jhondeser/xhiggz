@@ -1,0 +1,1 @@
+-- No-op: esta carpeta de migración se creó por duplicado (la real es 20260915190758_add_module_video_and_unlock, generada por 'npx prisma migrate dev'). Se deja vacía para no romper el historial de Prisma.

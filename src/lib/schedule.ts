@@ -57,8 +57,9 @@ export const GRUPOS_SEED: GrupoSeedItem[] = [
   { cursoSlug: 'minecraft-education-basico', nombre: 'Grupo 2', dia: 'Miércoles', franja: 'A', plazasTotal: 10 },
   { cursoSlug: 'minecraft-education-basico', nombre: 'Grupo 3', dia: 'Viernes',   franja: 'A', plazasTotal: 10 },
 
-  // Roblox Theme Park — Mar / Jue / Sáb
-  { cursoSlug: 'roblox-studio-theme-park', nombre: 'Grupo 1', dia: 'Martes',  franja: 'A', plazasTotal: 10 },
+  // Roblox Theme Park — Jue / Sáb
+  // (Grupo 1 de Martes se desactivó en producción — ver nota más abajo, ese
+  // hueco de Martes/Franja A ahora lo usa Roblox Xhiggs RPG Grupo 2)
   { cursoSlug: 'roblox-studio-theme-park', nombre: 'Grupo 2', dia: 'Jueves',  franja: 'A', plazasTotal: 10 },
   { cursoSlug: 'roblox-studio-theme-park', nombre: 'Grupo 3', dia: 'Sábado',  franja: 'A', plazasTotal: 10 },
 
@@ -76,6 +77,11 @@ export const GRUPOS_SEED: GrupoSeedItem[] = [
 
   // Web Básico — Sáb
   { cursoSlug: 'programacion-web-basico-html-css-js', nombre: 'Grupo 1', dia: 'Sábado', franja: 'B', plazasTotal: 8 },
+
+  // NOTA (producción): además del Grupo 1 de abajo (Lunes, Franja C), existe
+  // un Grupo 2 de 'roblox-studio-xhiggs-rpg' el Martes en Franja A (16:30),
+  // creado directamente en BD con scripts/replace-group.ts (no está en este
+  // seed porque ocupa el hueco que dejó libre Theme Park Grupo 1 de Martes).
 
   // ── Franja C ─────────────────────────────────────────────────────────────
   { cursoSlug: 'roblox-studio-xhiggs-rpg',                        nombre: 'Grupo 1', dia: 'Lunes',     franja: 'C', plazasTotal: 8 },

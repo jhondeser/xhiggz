@@ -11,6 +11,7 @@ interface SP {
   status?: string;
   source?: string;
   course?: string;
+  group?: string;
   q?: string;
 }
 
@@ -19,18 +20,20 @@ async function getData(sp: SP) {
   const status = (sp.status as EnrollmentStatus | "") || undefined;
   const source = (sp.source as EnrollmentSource | "") || undefined;
   const courseId = sp.course ? Number(sp.course) : undefined;
+  const groupId = sp.group ? Number(sp.group) : undefined;
   const q = sp.q?.trim() || undefined;
 
   const where = {
     ...(status ? { status } : {}),
     ...(source ? { source } : {}),
     ...(courseId ? { courseId } : {}),
+    ...(groupId ? { groupId } : {}),
     ...(q
       ? { user: { email: { contains: q, mode: "insensitive" as const } } }
       : {}),
   };
 
-  const [total, rows, courses] = await Promise.all([
+  const [total, rows, courses, groups] = await Promise.all([
     prisma.enrollment.count({ where }),
     prisma.enrollment.findMany({
       where,
@@ -55,9 +58,16 @@ async function getData(sp: SP) {
       select: { id: true, title: true },
       orderBy: { id: "asc" },
     }),
+    courseId
+      ? prisma.courseGroup.findMany({
+          where: { courseId },
+          select: { id: true, nombre: true, dia: true, franja: true },
+          orderBy: [{ dia: "asc" }, { franja: "asc" }],
+        })
+      : Promise.resolve([]),
   ]);
 
-  return { rows, total, page, courses, status, source, courseId, q };
+  return { rows, total, page, courses, groups, status, source, courseId, groupId, q };
 }
 
 function isAccessActive(e: {
@@ -75,7 +85,7 @@ export default async function EnrollmentsPage({
   searchParams: Promise<SP>;
 }) {
   const sp = await searchParams;
-  const { rows, total, page, courses, status, source, courseId, q } =
+  const { rows, total, page, courses, groups, status, source, courseId, groupId, q } =
     await getData(sp);
   const lastPage = Math.max(1, Math.ceil(total / PER_PAGE));
 
@@ -85,6 +95,7 @@ export default async function EnrollmentsPage({
     if (status) params.set("status", status);
     if (source) params.set("source", source);
     if (courseId) params.set("course", String(courseId));
+    if (groupId) params.set("group", String(groupId));
     if (q) params.set("q", q);
     return `?${params.toString()}`;
   }
@@ -142,6 +153,20 @@ export default async function EnrollmentsPage({
             </option>
           ))}
         </select>
+        {courseId && groups.length > 0 && (
+          <select
+            name="group"
+            defaultValue={groupId ?? ""}
+            className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm"
+          >
+            <option value="">Todos los grupos</option>
+            {groups.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.nombre} · {g.dia} (Franja {g.franja})
+              </option>
+            ))}
+          </select>
+        )}
         <button
           type="submit"
           className="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium rounded-lg px-4 py-2"

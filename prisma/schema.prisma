@@ -168,6 +168,17 @@ model CourseModule {
   temas   String[] @default([])
   orden   Int      @default(0)
 
+  // Vídeo de este módulo, alojado como no listado en YouTube. Se guarda la
+  // URL completa (watch?v=, youtu.be/ o embed/) tal cual se pega en el admin;
+  // src/lib/video.ts se encarga de extraer el ID para el embed.
+  videoUrl String?
+
+  // El profesor lo activa a mano con un interruptor en /admin/contenido.
+  // Aplica a TODOS los alumnos inscritos en el curso por igual (no hay
+  // desbloqueo distinto por alumno o por grupo — se decidió así por
+  // simplicidad: es más fácil ir soltando vídeo por vídeo).
+  publicado Boolean @default(false)
+
   courseId Int
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
