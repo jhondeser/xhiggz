@@ -1,5 +1,5 @@
 // src/app/admin/(panel)/enrollments/actions.ts
 //
-// (Vacío a propósito) El desbloqueo de contenido se maneja por vídeo/módulo
-// desde /admin/contenido (interruptor "publicado"), no por inscripción — se
-// simplificó así para no tener que gestionar el acceso alumno por alumno.
+// (Vacío a propósito) El desbloqueo de contenido se maneja por módulo y GRUPO
+// desde /admin/contenido (matriz módulos × grupos → GroupModuleRelease), no por
+// inscripción: el alumno ve lo liberado para el grupo de su Enrollment.

@@ -5,12 +5,17 @@
 //   1. Sin sesión → redirect a /login?from=/cursos/<slug>/aula
 //   2. Sesión válida pero sin Enrollment ACTIVO → redirect al landing del curso
 //   3. Sesión válida y Enrollment ACTIVO → render del aula
+//
+// Vídeos: cada grupo avanza a su ritmo. Un módulo está desbloqueado para el
+// alumno si existe GroupModuleRelease para el groupId de su Enrollment.
+// Sin grupo asignado → todo bloqueado (con aviso).
 
 import { redirect, notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { toYoutubeEmbedUrl } from "@/lib/video";
+import { getReleasedModuleIds } from "@/server/module-releases";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardBackground from "@/components/dashboard/DashboardBackground";
 
@@ -57,7 +62,10 @@ export default async function AulaPage({ params }: PageProps) {
     redirect(`/cursos/${slug}?reason=no-access`);
   }
 
-  // 4) Render
+  // 4) Módulos liberados para el grupo del alumno
+  const releasedIds = await getReleasedModuleIds(enrollment.groupId);
+
+  // 5) Render
   return (
     <div className="min-h-screen text-white">
       <DashboardBackground />
@@ -93,6 +101,13 @@ export default async function AulaPage({ params }: PageProps) {
           </div>
         </header>
 
+        {enrollment.groupId === null && (
+          <div className="mb-6 bg-amber-500/10 border border-amber-400/30 text-amber-100 text-sm rounded-2xl p-4">
+            Todavía no tienes un grupo de clase asignado, por eso los vídeos
+            aparecen bloqueados. Escríbenos y te lo asignamos.
+          </div>
+        )}
+
         <div className="space-y-4">
           {course.temario.length === 0 ? (
             <div className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl p-8 text-center text-white/40">
@@ -100,7 +115,7 @@ export default async function AulaPage({ params }: PageProps) {
             </div>
           ) : (
             course.temario.map((modulo, idx) => {
-              const unlocked = modulo.publicado;
+              const unlocked = releasedIds.has(modulo.id);
               const embedUrl = unlocked && modulo.videoUrl
                 ? toYoutubeEmbedUrl(modulo.videoUrl)
                 : null;

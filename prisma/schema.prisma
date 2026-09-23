@@ -73,6 +73,7 @@ model User {
   testimonialsWritten Testimonial[]
   orders              Order[]
   subscriptions       Subscription[]
+  moduleReleases      GroupModuleRelease[] @relation("ModuleReleasesPublished")
 }
 
 model Course {
@@ -173,11 +174,9 @@ model CourseModule {
   // src/lib/video.ts se encarga de extraer el ID para el embed.
   videoUrl String?
 
-  // El profesor lo activa a mano con un interruptor en /admin/contenido.
-  // Aplica a TODOS los alumnos inscritos en el curso por igual (no hay
-  // desbloqueo distinto por alumno o por grupo — se decidió así por
-  // simplicidad: es más fácil ir soltando vídeo por vídeo).
-  publicado Boolean @default(false)
+  // La publicación ya no es global: cada grupo avanza a su ritmo y el vídeo
+  // se libera por grupo en GroupModuleRelease (ver /admin/contenido).
+  releases GroupModuleRelease[]
 
   courseId Int
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
@@ -363,13 +362,36 @@ model CourseGroup {
 
   activo Boolean @default(true)
 
-  enrollments Enrollment[]
+  enrollments    Enrollment[]
+  moduleReleases GroupModuleRelease[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
   @@index([activo])
+}
+
+// Liberación del vídeo de un módulo para UN grupo concreto. Cada grupo
+// (CourseGroup) avanza a su ritmo con su profesor: el vídeo de un módulo se
+// libera solo para el grupo que ya dio esa clase. Un alumno ve el vídeo si
+// existe una fila para el groupId de su Enrollment activo.
+// Despublicar = borrar la fila.
+model GroupModuleRelease {
+  id       Int          @id @default(autoincrement())
+  groupId  Int
+  group    CourseGroup  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  moduleId Int
+  module   CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  publishedAt   DateTime @default(now())
+  // User que lo liberó. Null = liberado desde el panel admin (sesión por
+  // contraseña compartida, sin User) o creado por el backfill de migración.
+  publishedById Int?
+  publishedBy   User?    @relation("ModuleReleasesPublished", fields: [publishedById], references: [id], onDelete: SetNull)
+
+  @@unique([groupId, moduleId])
+  @@index([moduleId])
 }
 
 // Magic link tokens para login passwordless. Se guarda el HASH del token, no
