@@ -74,6 +74,11 @@ model User {
   orders              Order[]
   subscriptions       Subscription[]
   moduleReleases      GroupModuleRelease[] @relation("ModuleReleasesPublished")
+
+  // Profesor (role = TEACHER): grupos que imparte y sesiones registradas.
+  groupsTaught        CourseGroup[]  @relation("GroupTeacher")
+  sessionsTaught      GroupSession[] @relation("SessionTeacher")
+  sessionsCreated     GroupSession[] @relation("SessionCreatedBy")
 }
 
 model Course {
@@ -362,14 +367,57 @@ model CourseGroup {
 
   activo Boolean @default(true)
 
+  // Profesor del grupo (un solo profesor por grupo). Null = aún sin profesor.
+  // Es la fuente de verdad de permisos para el panel de profesor.
+  teacherId Int?
+  teacher   User? @relation("GroupTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
+
   enrollments    Enrollment[]
   moduleReleases GroupModuleRelease[]
+  sessions       GroupSession[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
   @@index([activo])
+  @@index([teacherId])
+}
+
+enum GroupSessionStatus {
+  IMPARTIDA
+  ANULADA
+}
+
+// Una clase impartida de un grupo. Es la base del pago a profesores (variable
+// por sesión impartida), así que:
+// - teacherId se GUARDA aquí (no se calcula desde el grupo): cambiar el
+//   profesor del grupo no reasigna sesiones pasadas.
+// - Una sola sesión por grupo y día (@@unique). Anular = estado ANULADA, no
+//   borrar, para conservar el histórico.
+// - onDelete Restrict: no se puede borrar un grupo ni un profesor con sesiones.
+model GroupSession {
+  id        Int         @id @default(autoincrement())
+  groupId   Int
+  group     CourseGroup @relation(fields: [groupId], references: [id], onDelete: Restrict)
+  teacherId Int
+  teacher   User        @relation("SessionTeacher", fields: [teacherId], references: [id], onDelete: Restrict)
+
+  // Día de la clase (sin hora; zona Europe/Madrid al calcularlo).
+  fecha  DateTime           @db.Date
+  estado GroupSessionStatus @default(IMPARTIDA)
+  // Observaciones libres de la clase. No son calificaciones.
+  observaciones String?
+
+  // Quién la registró. Null = admin (contraseña compartida, sin User).
+  createdById Int?
+  createdBy   User? @relation("SessionCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([groupId, fecha])
+  @@index([teacherId, fecha])
 }
 
 // Liberación del vídeo de un módulo para UN grupo concreto. Cada grupo

@@ -31,8 +31,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Student area
-  if (pathname.startsWith("/mis-cursos") || pathname.startsWith("/mi-cuenta")) {
+  // Student & teacher areas (solo exige sesión; el rol se comprueba en el servidor)
+  if (
+    pathname.startsWith("/mis-cursos") ||
+    pathname.startsWith("/mi-cuenta") ||
+    pathname.startsWith("/profesor")
+  ) {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
     if (token) return NextResponse.next();
 
@@ -45,5 +49,11 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*", "/mis-cursos/:path*", "/mi-cuenta/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/api/admin/:path*",
+    "/mis-cursos/:path*",
+    "/mi-cuenta/:path*",
+    "/profesor/:path*",
+  ],
 };

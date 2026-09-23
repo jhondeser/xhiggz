@@ -6,11 +6,24 @@ import { Menu, X } from "lucide-react";
 import LogoAnimated from "@/components/common/LogoAnimated";
 import LogoutButton from "@/components/auth/LogoutButton";
 
-interface DashboardNavbarProps {
-  email?: string | null;
+interface NavLink {
+  href: string;
+  label: string;
 }
 
-export default function DashboardNavbar({ email }: DashboardNavbarProps) {
+const STUDENT_LINKS: NavLink[] = [
+  { href: "/mis-cursos", label: "Mis cursos" },
+  { href: "/mi-cuenta", label: "Mi cuenta" },
+  { href: "/cursos", label: "Explorar cursos" },
+];
+
+interface DashboardNavbarProps {
+  email?: string | null;
+  /** Enlaces del menú. Por defecto, los del alumno. */
+  links?: NavLink[];
+}
+
+export default function DashboardNavbar({ email, links = STUDENT_LINKS }: DashboardNavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -74,27 +87,16 @@ export default function DashboardNavbar({ email }: DashboardNavbarProps) {
 
         {/* Nav links — desktop */}
         <nav className="hidden md:flex gap-8 text-sm font-medium items-center">
-          <Link
-            href="/mis-cursos"
-            className="hover:text-cyan-400 transition-all duration-200 font-semibold relative group"
-          >
-            Mis cursos
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-200 group-hover:w-full" />
-          </Link>
-          <Link
-            href="/mi-cuenta"
-            className="hover:text-cyan-400 transition-all duration-200 font-semibold relative group"
-          >
-            Mi cuenta
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-200 group-hover:w-full" />
-          </Link>
-          <Link
-            href="/cursos"
-            className="hover:text-cyan-400 transition-all duration-200 font-semibold relative group"
-          >
-            Explorar cursos
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-200 group-hover:w-full" />
-          </Link>
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="hover:text-cyan-400 transition-all duration-200 font-semibold relative group"
+            >
+              {l.label}
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-cyan-400 transition-all duration-200 group-hover:w-full" />
+            </Link>
+          ))}
         </nav>
 
         {/* Derecha — email + logout */}
@@ -117,27 +119,16 @@ export default function DashboardNavbar({ email }: DashboardNavbarProps) {
         `}
       >
         <div className="px-4 pt-2 pb-6 space-y-4">
-          <Link
-            href="/mis-cursos"
-            className="block text-base font-medium hover:text-cyan-400 transition-all duration-200 py-2 border-b border-white/10"
-            onClick={() => setIsOpen(false)}
-          >
-            Mis cursos
-          </Link>
-          <Link
-            href="/mi-cuenta"
-            className="block text-base font-medium hover:text-cyan-400 transition-all duration-200 py-2 border-b border-white/10"
-            onClick={() => setIsOpen(false)}
-          >
-            Mi cuenta
-          </Link>
-          <Link
-            href="/cursos"
-            className="block text-base font-medium hover:text-cyan-400 transition-all duration-200 py-2 border-b border-white/10"
-            onClick={() => setIsOpen(false)}
-          >
-            Explorar cursos
-          </Link>
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="block text-base font-medium hover:text-cyan-400 transition-all duration-200 py-2 border-b border-white/10"
+              onClick={() => setIsOpen(false)}
+            >
+              {l.label}
+            </Link>
+          ))}
           <div className="pt-4 border-t border-white/20 flex flex-col gap-3">
             {email && (
               <span className="text-white/40 text-xs text-center truncate">{email}</span>

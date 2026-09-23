@@ -7,9 +7,8 @@
 // por setModuleRelease(), que recibe QUIÉN actúa (actor) y comprueba en el
 // servidor que puede gestionar ese grupo.
 //
-// Hoy solo existe el actor "admin" (panel con contraseña compartida, sin User).
-// Preparado para profesores: cuando exista CourseGroup.teacherId, basta con
-// implementar la rama "teacher" de assertCanManageGroup().
+// Actores: "admin" (panel con contraseña compartida, sin User) y "teacher"
+// (User role = TEACHER asignado al grupo vía CourseGroup.teacherId).
 
 import { prisma } from "@/lib/prisma";
 
@@ -34,15 +33,16 @@ export async function assertCanManageGroup(
 ): Promise<void> {
   if (actor.kind === "admin") return;
 
-  // TODO(profesores): cuando exista CourseGroup.teacherId (y el User tenga
-  // role TEACHER), comprobar aquí:
-  //   const g = await prisma.courseGroup.findUnique({ where: { id: groupId }, select: { teacherId: true } });
-  //   if (g?.teacherId !== actor.userId) throw new ReleaseForbiddenError();
-  // Hasta entonces, ningún profesor puede liberar nada.
-  void groupId;
-  throw new ReleaseForbiddenError(
-    "La liberación por profesor aún no está habilitada",
-  );
+  // Profesor: solo el profesor asignado al grupo (CourseGroup.teacherId).
+  // Además tiene que seguir siendo TEACHER (si el admin le quita el rol,
+  // pierde el acceso aunque siga asignado).
+  const [group, user] = await Promise.all([
+    prisma.courseGroup.findUnique({ where: { id: groupId }, select: { teacherId: true } }),
+    prisma.user.findUnique({ where: { id: actor.userId }, select: { role: true } }),
+  ]);
+  if (!group || group.teacherId !== actor.userId || user?.role !== "TEACHER") {
+    throw new ReleaseForbiddenError();
+  }
 }
 
 /**
