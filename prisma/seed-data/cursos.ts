@@ -733,10 +733,10 @@ export const courses: Course[] = [
     img: "/images/cursos_img/godot_card_lvl1.png",
 
     nivel: "Intermedio",
-    duracion: "16 semanas",
+    duracion: "24 semanas",
     precio: {
       mensual: 54,
-      completo: 189,
+      completo: 249,
       moneda: "€"
     },
 
@@ -758,7 +758,7 @@ export const courses: Course[] = [
 
     contenido: {
       modulos: 8,
-      horas: 24,
+      horas: 36,
       proyectos: 1
     },
 
@@ -804,7 +804,7 @@ export const courses: Course[] = [
     temario: [
       {
         modulo: "Introducción al Motor Godot",
-        semanas: "Semanas 1-2",
+        semanas: "Semanas 1-3",
         temas: [
           "Instalación y configuración de Godot",
           "Interfaz del motor y organización del proyecto",
@@ -817,7 +817,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Creación del Personaje Jugable",
-        semanas: "Semanas 3-4",
+        semanas: "Semanas 4-6",
         temas: [
           "Nodo CharacterBody2D",
           "Movimiento del personaje",
@@ -830,7 +830,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Sistema de Animaciones",
-        semanas: "Semanas 5-6",
+        semanas: "Semanas 7-9",
         temas: [
           "Spritesheets y frames de animación",
           "Uso del nodo AnimatedSprite2D",
@@ -842,7 +842,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Sistemas de Interacción",
-        semanas: "Semanas 7-8",
+        semanas: "Semanas 10-12",
         temas: [
           "Áreas de detección",
           "Sistema de señales (signals)",
@@ -854,7 +854,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Sistema de Enemigos",
-        semanas: "Semanas 9-10",
+        semanas: "Semanas 13-15",
         temas: [
           "Creación de enemigos",
           "Variables de vida y daño",
@@ -867,7 +867,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "NPCs y Narrativa",
-        semanas: "Semanas 11-12",
+        semanas: "Semanas 16-18",
         temas: [
           "Creación de NPCs",
           "Sistemas de diálogo",
@@ -879,7 +879,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Diseño de Mazmorras",
-        semanas: "Semanas 13-14",
+        semanas: "Semanas 19-21",
         temas: [
           "Introducción al Level Design",
           "Diseño de mapas de mazmorra",
@@ -891,7 +891,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Proyecto Final: Xelda",
-        semanas: "Semanas 15-16",
+        semanas: "Semanas 22-24",
         temas: [
           "Integración de las mazmorras en el mundo principal",
           "Organización del proyecto final",
@@ -915,10 +915,10 @@ export const courses: Course[] = [
     img: "/images/cursos_img/godot_card_lvl2.png",
 
     nivel: "Avanzado",
-    duracion: "16 semanas",
+    duracion: "24 semanas",
     precio: {
       mensual: 69,
-      completo: 239,
+      completo: 339,
       moneda: "€"
     },
 
@@ -940,7 +940,7 @@ export const courses: Course[] = [
 
     contenido: {
       modulos: 6,
-      horas: 24,
+      horas: 36,
       proyectos: 1
     },
 
@@ -985,7 +985,7 @@ export const courses: Course[] = [
     temario: [
       {
         modulo: "Fundamentos del Espacio 3D en Godot",
-        semanas: "Semanas 1-3",
+        semanas: "Semanas 1-4",
         temas: [
           "Introducción al desarrollo de videojuegos en 3D",
           "Diferencias entre proyectos 2D y 3D",
@@ -998,7 +998,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Control del Personaje y Cámara en Tercera Persona",
-        semanas: "Semanas 4-6",
+        semanas: "Semanas 5-8",
         temas: [
           "Uso de CharacterBody3D",
           "Movimiento del jugador en 3D",
@@ -1011,7 +1011,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Construcción del Reino y Diseño de Niveles",
-        semanas: "Semanas 7-9",
+        semanas: "Semanas 9-12",
         temas: [
           "Bloqueo inicial del nivel con geometría simple",
           "Diseño del reino inspirado en mitología nórdica",
@@ -1024,7 +1024,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Animación, Interacción y NPCs",
-        semanas: "Semanas 10-11",
+        semanas: "Semanas 13-16",
         temas: [
           "Introducción a animaciones en 3D",
           "Estados básicos: idle, caminar, correr y atacar",
@@ -1037,7 +1037,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Sistema de Combate y Enemigos",
-        semanas: "Semanas 12-14",
+        semanas: "Semanas 17-20",
         temas: [
           "Sistema básico de vida del jugador",
           "Hitboxes y detección de daño",
@@ -1050,7 +1050,7 @@ export const courses: Course[] = [
       },
       {
         modulo: "Integración Final del Reino y Presentación",
-        semanas: "Semanas 15-16",
+        semanas: "Semanas 21-24",
         temas: [
           "Diseño de un desafío o puzzle del reino",
           "Pulido visual del escenario",
