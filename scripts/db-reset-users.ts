@@ -32,6 +32,8 @@ async function main() {
     prisma.lead.deleteMany(),
     prisma.testimonial.deleteMany(),
     prisma.verificationToken.deleteMany(),
+    // Antes que User y CourseGroup: sus FKs son Restrict
+    prisma.groupSession.deleteMany(),
     prisma.user.deleteMany(),
     prisma.courseGroup.deleteMany(),
   ])
@@ -44,6 +46,7 @@ async function main() {
     'Leads',
     'Testimonials',
     'VerificationTokens',
+    'GroupSessions',
     'Users',
     'CourseGroups',
   ]
