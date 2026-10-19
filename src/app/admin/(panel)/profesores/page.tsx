@@ -6,7 +6,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { diaIndex } from "@/lib/schedule";
 import { todayMadridYmd, ymdToDbDate } from "@/lib/madrid-date";
-import { createTeacher, removeTeacherRole, setGroupTeacher } from "./actions";
+import { createTeacher, removeTeacherRole, setGroupMeetLink, setGroupTeacher } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +53,7 @@ export default async function ProfesoresPage({ searchParams }: { searchParams: P
             horaInicio: true,
             activo: true,
             teacherId: true,
+            enlace: true,
           },
         },
       },
@@ -170,7 +171,7 @@ export default async function ProfesoresPage({ searchParams }: { searchParams: P
 
       {/* ── Asignación por grupo ───────────────────────────────────────── */}
       <section>
-        <h2 className="text-lg font-semibold mb-3">Profesor de cada grupo</h2>
+        <h2 className="text-lg font-semibold mb-3">Profesor y enlace de Meet de cada grupo</h2>
         <div className="space-y-4">
           {courses.map((c) => (
             <div key={c.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
@@ -182,11 +183,8 @@ export default async function ProfesoresPage({ searchParams }: { searchParams: P
                   .slice()
                   .sort((a, b) => diaIndex(a.dia) - diaIndex(b.dia) || a.horaInicio.localeCompare(b.horaInicio))
                   .map((g) => (
-                    <form
-                      key={g.id}
-                      action={setGroupTeacher}
-                      className="flex flex-wrap items-center gap-3 text-sm"
-                    >
+                    <div key={g.id} className="flex flex-wrap items-center gap-3 text-sm">
+                    <form action={setGroupTeacher} className="flex flex-wrap items-center gap-3">
                       <input type="hidden" name="groupId" value={g.id} />
                       <div className="w-64 text-slate-300">
                         {g.nombre} · {g.dia} · {g.horaInicio}
@@ -211,6 +209,27 @@ export default async function ProfesoresPage({ searchParams }: { searchParams: P
                         Guardar
                       </button>
                     </form>
+                    <form action={setGroupMeetLink} className="flex flex-wrap items-center gap-2">
+                      <input type="hidden" name="groupId" value={g.id} />
+                      <input
+                        name="enlace"
+                        type="url"
+                        defaultValue={g.enlace ?? ""}
+                        placeholder="https://meet.google.com/abc-defg-hij"
+                        pattern="https://meet\.google\.com/\S+"
+                        title="Debe empezar por https://meet.google.com/"
+                        aria-label="Enlace de Meet"
+                        className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 w-80"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg px-3 py-1.5"
+                      >
+                        Guardar Meet
+                      </button>
+                      {!g.enlace && <span className="text-[11px] text-amber-400">sin enlace</span>}
+                    </form>
+                    </div>
                   ))}
               </div>
             </div>

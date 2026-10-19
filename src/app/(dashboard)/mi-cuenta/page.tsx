@@ -85,10 +85,10 @@ export default async function MiCuentaPage() {
           <p className="text-xs text-white/30 mt-4 border-t border-white/10 pt-4">
             Para cancelar una suscripción escríbenos a{" "}
             <a
-              href="mailto:soporte@xhiggz.com"
+              href="mailto:xhiggscreation@gmail.com"
               className="text-white/50 hover:text-cyan-400 underline transition-colors"
             >
-              soporte@xhiggz.com
+              xhiggscreation@gmail.com
             </a>
           </p>
         </section>

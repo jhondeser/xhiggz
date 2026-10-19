@@ -372,6 +372,10 @@ model CourseGroup {
   teacherId Int?
   teacher   User? @relation("GroupTeacher", fields: [teacherId], references: [id], onDelete: SetNull)
 
+  // Enlace de Google Meet del grupo (https://meet.google.com/...). Lo lee n8n
+  // directamente de la BD para los recordatorios de clase. Null = sin enlace.
+  enlace String?
+
   enrollments    Enrollment[]
   moduleReleases GroupModuleRelease[]
   sessions       GroupSession[]

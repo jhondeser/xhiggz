@@ -91,6 +91,37 @@ export async function setGroupTeacher(formData: FormData) {
   });
 }
 
+const MEET_PREFIX = "https://meet.google.com/";
+
+/**
+ * Guarda (o borra, con el campo vacío) el enlace de Google Meet de un grupo.
+ * Lo lee n8n directamente de la BD para los recordatorios de clase.
+ */
+export async function setGroupMeetLink(formData: FormData) {
+  await run(async () => {
+    const groupId = Number(formData.get("groupId"));
+    const raw = String(formData.get("enlace") ?? "").trim();
+    if (!Number.isInteger(groupId) || groupId <= 0) throw new AdminRuleError("Grupo inválido");
+
+    let enlace: string | null = null;
+    if (raw !== "") {
+      if (!raw.startsWith(MEET_PREFIX) || raw.length === MEET_PREFIX.length || /\s/.test(raw) || raw.length > 200) {
+        throw new AdminRuleError(`El enlace de Meet debe empezar por ${MEET_PREFIX}`);
+      }
+      enlace = raw;
+    }
+
+    const g = await prisma.courseGroup.update({
+      where: { id: groupId },
+      data: { enlace },
+      select: { nombre: true, course: { select: { title: true } } },
+    });
+    return enlace
+      ? `Enlace de Meet guardado en ${g.course.title} · ${g.nombre}`
+      : `${g.course.title} · ${g.nombre} queda sin enlace de Meet`;
+  });
+}
+
 /** Quita el rol de profesor. Solo si ya no tiene grupos asignados. */
 export async function removeTeacherRole(formData: FormData) {
   await run(async () => {

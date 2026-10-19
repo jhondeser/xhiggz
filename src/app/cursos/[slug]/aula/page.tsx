@@ -49,6 +49,7 @@ export default async function AulaPage({ params }: PageProps) {
     where: { userId_courseId: { userId: session.user.id, courseId: course.id } },
     include: {
       user: { select: { name: true, email: true } },
+      group: { select: { nombre: true, dia: true, horaInicio: true, horaFin: true, enlace: true } },
     },
   });
 
@@ -105,6 +106,29 @@ export default async function AulaPage({ params }: PageProps) {
           <div className="mb-6 bg-amber-500/10 border border-amber-400/30 text-amber-100 text-sm rounded-2xl p-4">
             Todavía no tienes un grupo de clase asignado, por eso los vídeos
             aparecen bloqueados. Escríbenos y te lo asignamos.
+          </div>
+        )}
+
+        {enrollment.group && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl p-4">
+            <div className="text-sm">
+              <div className="font-semibold">Tu clase en directo</div>
+              <div className="text-white/50">
+                {enrollment.group.nombre} · {enrollment.group.dia} · {enrollment.group.horaInicio}–{enrollment.group.horaFin}
+              </div>
+            </div>
+            {enrollment.group.enlace?.startsWith("https://meet.google.com/") ? (
+              <a
+                href={enrollment.group.enlace}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-sm font-semibold rounded-xl px-4 py-2"
+              >
+                Entrar a la clase (Meet)
+              </a>
+            ) : (
+              <span className="text-xs text-white/40">El enlace de la clase aparecerá aquí pronto.</span>
+            )}
           </div>
         )}
 

@@ -3,9 +3,8 @@
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { useEffect, useRef, useCallback, useState } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { testimonials } from "@/data/testimonials";
+import { testimonials, testimonialStats } from "@/data/testimonials";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Testimonials() {
@@ -93,11 +92,14 @@ export default function Testimonials() {
     },
   };
 
-  // Función para obtener la fecha relativa (opcional)
-  const getRelativeTime = (index: number) => {
-    const times = ["Hace 1 mes", "Hace 2 semanas", "Recientemente", "Hace 3 meses", "Hace 1 semana"];
-    return times[index % times.length];
-  };
+  const getInitials = (name: string) =>
+    name
+      .replace(/^Familia de /, "")
+      .split(/\s+/)
+      .filter((w) => w.length > 1 && w !== "y")
+      .slice(0, 2)
+      .map((w) => w[0].toUpperCase())
+      .join("");
 
   return (
     <section className="relative py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/50 overflow-hidden">
@@ -129,7 +131,7 @@ export default function Testimonials() {
           >
             Lo que Dicen Nuestros{" "}
             <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-              Estudiantes
+              Alumnos y Familias
             </span>
           </motion.h2>
 
@@ -137,7 +139,7 @@ export default function Testimonials() {
             className="text-xl text-gray-600 max-w-2xl mx-auto"
             variants={item}
           >
-            Descubre las experiencias reales de quienes ya transformaron su futuro con xhiggs
+            Opiniones reales de alumnos y familias, sacadas de nuestra encuesta de satisfacción
           </motion.p>
         </motion.div>
 
@@ -200,23 +202,39 @@ export default function Testimonials() {
                     {/* Avatar y info */}
                     <div className="flex items-center gap-4 mb-6">
                       <div className="relative">
-                        <Image
-                          src={testimonial.avatar}
-                          alt={`Avatar de ${testimonial.name}`}
-                          width={80}
-                          height={80}
-                          className="rounded-2xl border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-300"
-                        />
+                        <div
+                          aria-hidden="true"
+                          className="w-20 h-20 rounded-2xl border-4 border-white shadow-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform duration-300"
+                        >
+                          {getInitials(testimonial.name)}
+                        </div>
                         <div className="absolute -bottom-2 -right-2 bg-cyan-500 rounded-full p-1 shadow-lg">
                           <Star className="w-4 h-4 text-white" />
                         </div>
                       </div>
                       <div className="text-left">
-                        <h3 className="font-bold text-gray-900 text-lg">{testimonial.name}</h3>
+                        <h3 className="font-bold text-gray-900 text-lg">
+                          {testimonial.name}
+                          {testimonial.role && (
+                            <span className="ml-2 text-sm font-normal text-gray-500">
+                              · {testimonial.role}
+                            </span>
+                          )}
+                        </h3>
                         <p className="text-cyan-600 font-medium">{testimonial.course}</p>
-                        <div className="flex gap-1 mt-1">
+                        <div
+                          className="flex gap-1 mt-1"
+                          aria-label={`Valoración: ${testimonial.rating} de 5`}
+                        >
                           {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < testimonial.rating
+                                  ? "text-yellow-400 fill-current"
+                                  : "text-gray-300"
+                              }`}
+                            />
                           ))}
                         </div>
                       </div>
@@ -231,7 +249,7 @@ export default function Testimonials() {
                     <div className ="mt-6 pt-6 border-t border-gray-100">
                       <div className="flex justify-between items-center text-sm text-gray-500">
                         <span>Testimonio {index + 1} de {testimonials.length}</span>
-                        <span>{getRelativeTime(index)}</span>
+                        <span>Encuesta de satisfacción · 2026</span>
                       </div>
                     </div>
                   </div>
@@ -263,19 +281,15 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           variants={container}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 max-w-2xl mx-auto"
+          className="grid grid-cols-3 gap-8 mt-16 max-w-xl mx-auto"
         >
           <motion.div variants={item} className="text-center">
-            <div className="text-3xl font-bold text-cyan-600">4.9/5</div>
-            <div className="text-gray-600 text-sm">Rating Promedio</div>
+            <div className="text-3xl font-bold text-cyan-600">{testimonialStats.averageRating}</div>
+            <div className="text-gray-600 text-sm">Valoración media</div>
           </motion.div>
           <motion.div variants={item} className="text-center">
-            <div className="text-3xl font-bold text-cyan-600">500+</div>
-            <div className="text-gray-600 text-sm">Testimonios</div>
-          </motion.div>
-          <motion.div variants={item} className="text-center">
-            <div className="text-3xl font-bold text-cyan-600">98%</div>
-            <div className="text-gray-600 text-sm">Recomiendan</div>
+            <div className="text-3xl font-bold text-cyan-600">{testimonialStats.recommendPct}</div>
+            <div className="text-gray-600 text-sm">Nos recomendarían</div>
           </motion.div>
           <motion.div variants={item} className="text-center">
             <div className="text-3xl font-bold text-cyan-600">∞</div>

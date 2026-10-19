@@ -67,9 +67,13 @@ export interface Instructor {
 
 export interface Testimonial {
   name: string;
+  /** Edad o relación (p. ej. "12 años", "Madre · alumno de 7 años") */
+  role?: string;
   course: string;
   message: string;
-  avatar: string;
+  /** Valoración real de la encuesta (1–5) */
+  rating: number;
+  avatar?: string;
 }
 
 export interface BlogPost {
