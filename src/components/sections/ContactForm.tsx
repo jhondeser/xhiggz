@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, User, MessagesSquare, GraduationCap } from "lucide-react";
+import { sendContactMessage } from "@/app/contacto/actions";
 
 export default function ContactForm() {
   const [form, setForm] = useState({
@@ -13,6 +14,7 @@ export default function ContactForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -23,17 +25,37 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simular envío
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    console.log("Formulario enviado:", form);
-    setIsSubmitted(true);
-    setForm({ name: "", email: "", area: "", message: "" });
-    setIsSubmitting(false);
-    
-    // Resetear después de 5 segundos
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setError("");
+
+    const areaLabel =
+      areas.find((a) => a.value === form.area)?.label.replace(/^\S+\s/, "") || form.area;
+
+    const data = new FormData();
+    data.set("nombre", form.name);
+    data.set("email", form.email);
+    data.set("asunto", `Solicitud desde la home · ${areaLabel}`);
+    data.set(
+      "mensaje",
+      `Área de interés: ${areaLabel}\n\n${form.message.trim() || "(Sin mensaje adicional)"}`,
+    );
+    const honeypot = (e.currentTarget as HTMLFormElement).elements.namedItem("website");
+    data.set("website", honeypot instanceof HTMLInputElement ? honeypot.value : "");
+
+    try {
+      const res = await sendContactMessage({ status: "idle", message: "" }, data);
+      if (res.status === "success") {
+        setIsSubmitted(true);
+        setForm({ name: "", email: "", area: "", message: "" });
+      } else {
+        setError(res.message);
+      }
+    } catch {
+      setError(
+        "No hemos podido enviar el mensaje. Escríbenos a xhiggscreation@gmail.com o por WhatsApp.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const areas = [
@@ -152,8 +174,8 @@ export default function ContactForm() {
                       <GraduationCap className="w-6 h-6 text-cyan-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Aprendizaje 100% Práctico</h4>
-                      <p className="text-gray-600 text-sm">Proyectos reales desde el primer día</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Profes que crean de verdad</h4>
+                      <p className="text-gray-600 text-sm">Te enseñan desarrolladores en activo, no solo teoría</p>
                     </div>
                   </div>
                   
@@ -162,8 +184,8 @@ export default function ContactForm() {
                       <User className="w-6 h-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Mentoría Personalizada</h4>
-                      <p className="text-gray-600 text-sm">Soporte 1:1 con expertos de la industria</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Grupos reducidos</h4>
+                      <p className="text-gray-600 text-sm">Atención cercana: el profe conoce a cada alumno</p>
                     </div>
                   </div>
                   
@@ -172,8 +194,8 @@ export default function ContactForm() {
                       <MessagesSquare className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-1">Comunidad Global</h4>
-                      <p className="text-gray-600 text-sm">Conecta con creadores alrededor del mundo</p>
+                      <h4 className="font-semibold text-gray-900 mb-1">Comunidad Xhiggs</h4>
+                      <p className="text-gray-600 text-sm">Comparte tus proyectos con otros creadores</p>
                     </div>
                   </div>
                 </div>
@@ -186,8 +208,8 @@ export default function ContactForm() {
                   <div className="text-sm text-gray-600">Respuesta</div>
                 </div>
                 <div className="bg-white rounded-2xl p-6 text-center border border-gray-100 shadow-sm">
-                  <div className="text-2xl font-bold text-cyan-600">98%</div>
-                  <div className="text-sm text-gray-600">Satisfacción</div>
+                  <div className="text-2xl font-bold text-cyan-600">4.6/5</div>
+                  <div className="text-sm text-gray-600">Valoración de familias</div>
                 </div>
               </div>
             </motion.div>
@@ -198,6 +220,11 @@ export default function ContactForm() {
               onSubmit={handleSubmit}
               className="bg-white rounded-3xl p-8 shadow-2xl border border-gray-100 space-y-6"
             >
+              {/* Honeypot anti-spam (oculto) */}
+              <div className="hidden" aria-hidden="true">
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+              </div>
+
               <div className="space-y-4">
                 <div className="relative">
                   <User className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" />
@@ -277,6 +304,12 @@ export default function ContactForm() {
                   </>
                 )}
               </motion.button>
+
+              {error && (
+                <p role="alert" className="text-center text-sm text-red-600">
+                  {error}
+                </p>
+              )}
 
               <p className="text-center text-sm text-gray-500">
                 Al enviar, aceptas nuestra política de privacidad. No spam, prometido.
